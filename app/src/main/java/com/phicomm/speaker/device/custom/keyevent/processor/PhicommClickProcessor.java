@@ -35,7 +35,12 @@ public abstract class PhicommClickProcessor implements PhicommStatusListener {
         }
     }
 
+    /**
+     * 根据当前设备状态分发处理逻辑
+     * @param deviceStatus 设备当前状态码
+     */
     private void dispatchDeviceStatus(int deviceStatus) {
+        //是否响铃状态
         if (isRingingStatus()) {
             onRingingStatus();
             return;

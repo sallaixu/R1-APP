@@ -229,6 +229,11 @@ public final class UserPerferenceUtil {
         return SharedPreferencesHelper.getInstance(context, SP_NAME).getStringValue(SP_USER_LOCATION_INFO, null);
     }
 
+    /**
+     * 获取主要的唤醒词
+     * @param context
+     * @return
+     */
     public static List<String> getMainWakeupWord(Context context) {
         HashSet hashSet = new HashSet();
         Set<String> stringSetValue = SharedPreferencesHelper.getInstance(context, SP_NAME).getStringSetValue(SP_WAKEUP_WORD);
@@ -372,7 +377,7 @@ public final class UserPerferenceUtil {
     }
 
     public static String getUserTTSModelType(Context context) {
-        return SharedPreferencesHelper.getInstance(context, SP_NAME).getStringValue(SP_USER_TTS_MODEL_TYPE, "SWEET");
+        return SharedPreferencesHelper.getInstance(context, SP_NAME).getStringValue(SP_USER_TTS_MODEL_TYPE, "LZL");
     }
 
     public static String getValidSdk(Context context) {

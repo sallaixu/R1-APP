@@ -8,7 +8,8 @@ import org.litepal.util.Const;
 import java.util.*;
 
 final class DefaultANTPipeline implements ANTPipeline {
-    static final /* synthetic */ boolean $assertionsDisabled = (!DefaultANTPipeline.class.desiredAssertionStatus());
+    static final /* synthetic */
+    boolean $assertionsDisabled = (!DefaultANTPipeline.class.desiredAssertionStatus());
     private static final WeakHashMap<Class<?>, String>[] NAME_CACHES = new WeakHashMap[Runtime.getRuntime().availableProcessors()];
     private static final String TAG = "DefaultANTPipeline";
     final ANTEngine antEngine;

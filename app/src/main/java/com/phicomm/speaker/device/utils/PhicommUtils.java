@@ -1,5 +1,6 @@
 package com.phicomm.speaker.device.utils;
 
+import android.nfc.Tag;
 import android.util.Log;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -7,6 +8,7 @@ import com.unisound.vui.util.HttpUtils;
 import com.unisound.vui.util.LogMgr;
 import nluparser.scheme.SName;
 import okhttp3.Response;
+import xyz.sallai.r1.BodyParse;
 import xyz.yhsj.kmusic.KMusic;
 import xyz.yhsj.kmusic.entity.MusicResp;
 import xyz.yhsj.kmusic.entity.MusicTop;
@@ -22,6 +24,8 @@ import java.util.List;
  * @author PH
  */
 public class PhicommUtils {
+    private static final String TAG = PhicommUtils.class.getSimpleName();
+    public static BodyParse bodyParse = new BodyParse();
 
     public static JSONObject refomatNewApi(String word, String response) {
 
@@ -48,18 +52,16 @@ public class PhicommUtils {
 //                if("random".equals(jResult.getString("searchType"))){
 //                    LogMgr.w("PPP HOOK:","FOUND RANDOM Type, May Not Found");
                 // research by kw music api
-                String keyword = resJson.getJSONObject("semantic").getJSONObject("intent").getString("keyword");
-                if (word.contains("播放音乐")) {
-                    keyword = word.replace("播放音乐", "");
-                }
-                LogMgr.d("PPP HOOK", "Search Music By KW : "+keyword);
-                JSONArray kwSongList = searchSongByKWMusic(keyword);
-                jResult.put("audioList", kwSongList);
-                jResult.put("searchType", "common");
-
+//                String keyword = resJson.getJSONObject("semantic").getJSONObject("intent").getString("keyword");
+//                if (word.contains("播放音乐")) {
+//                    keyword = word.replace("播放音乐", "");
 //                }
-
+//                LogMgr.d("PPP HOOK", "Search Music By KW : "+keyword);
+//                JSONArray kwSongList = searchSongByKWMusic(keyword);
+//                jResult.put("audioList", kwSongList);
+                jResult.put("searchType", "common");
                 jResult.put("musicinfo", jResult.remove("audioList"));
+                Log.d("pp", "res " + jResult.toJSONString());
                 return mixtureJson;
             }
             case SName.AUDIO: {
@@ -115,11 +117,15 @@ public class PhicommUtils {
 
         if (asrWord != null) {
             boolean need = true;
+            Log.d("PPP",resJson.getString("service"));
             switch (resJson.getString("service")) {
                 case SName.NEWS: {
                     break;
                 }
                 case SName.MUSIC: {
+                    need = false;
+                    Log.d("PPP", "hookRawAsr: my music parse");
+                    rawAsr = bodyParse.MusicParse(asrWord);
                     break;
                 }
                 case SName.AUDIO: {
@@ -174,7 +180,6 @@ public class PhicommUtils {
                     }
                 }
             }
-
         }
         return rawAsr;
     }

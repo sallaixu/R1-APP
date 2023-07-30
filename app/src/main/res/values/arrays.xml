@@ -6,6 +6,7 @@
     <string-array name="default_wakeup_words">
         <item>小讯小讯</item>
         <item>交接手续</item>
+        <item>小宝小宝</item>
     </string-array>
     <string-array name="memo_time_day_nlu">
         <item>今天</item>

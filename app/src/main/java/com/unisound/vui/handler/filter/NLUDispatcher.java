@@ -2,11 +2,9 @@ package com.unisound.vui.handler.filter;
 
 import android.content.Context;
 import android.os.Handler;
-import android.os.StrictMode;
 import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
 import com.phicomm.speaker.device.R;
-import com.phicomm.speaker.device.utils.PhicommUtils;
 import com.unisound.vui.common.config.ANTConfigPreference;
 import com.unisound.vui.common.network.NetUtil;
 import com.unisound.vui.engine.ANTHandlerContext;
@@ -28,7 +26,7 @@ import org.json.JSONObject;
 public final class NLUDispatcher extends ANTEventDispatcher {
 
     /* renamed from: a  reason: collision with root package name */
-    private boolean f423a;
+    private boolean isHandled;
     private boolean b;
     private final MixtureProcessor c;
     private NluProcessor d;
@@ -63,8 +61,8 @@ public final class NLUDispatcher extends ANTEventDispatcher {
     }
 
     private boolean a(ANTHandlerContext aNTHandlerContext) {
-        if (b(aNTHandlerContext)) {
-            this.f423a = true;
+        if (checkResultIsTrue(aNTHandlerContext)) {
+            this.isHandled = true;
             NLU c2 = c("bluetooth_error");
             c2.setText(aNTHandlerContext.androidContext().getString(R.string.tts_music_change_no_supported));
             c(aNTHandlerContext, c2);
@@ -72,7 +70,7 @@ public final class NLUDispatcher extends ANTEventDispatcher {
         } else if (c(aNTHandlerContext) && !this.b) {
             return false;
         } else {
-            this.f423a = true;
+            this.isHandled = true;
             NLU c3 = c("-90002");
             c3.setText("no network");
             c(aNTHandlerContext, c3);
@@ -86,10 +84,10 @@ public final class NLUDispatcher extends ANTEventDispatcher {
             LogMgr.d("NLUDispatcher", "handleNetFilterService return filter service ...");
             return false;
         }
-        this.f423a = true;
+        this.isHandled = true;
         nlu.setLocalNLU(false);
         nlu.setAsrResult(str);
-        b(aNTHandlerContext, nlu);
+        checkResultIsTrue(aNTHandlerContext, nlu);
         return true;
     }
 
@@ -97,7 +95,7 @@ public final class NLUDispatcher extends ANTEventDispatcher {
         if (a(aNTHandlerContext, nlu)) {
             return false;
         }
-        this.f423a = true;
+        this.isHandled = true;
         nlu.setLocalNLU(true);
         nlu.setAsrResult(str);
         c(aNTHandlerContext, nlu);
@@ -110,11 +108,11 @@ public final class NLUDispatcher extends ANTEventDispatcher {
     }
 
     private boolean a(ANTHandlerContext aNTHandlerContext, NLU nlu) {
-        return a(nlu.getService()) && !this.b && !b(aNTHandlerContext);
+        return a(nlu.getService()) && !this.b && !checkResultIsTrue(aNTHandlerContext);
     }
 
     private boolean a(String str) {
-        return a.a(str);
+        return YzsServiceUtils.checkService(str);
     }
 
     private boolean a(LocalASR localASR, NLU nlu) {
@@ -129,7 +127,7 @@ public final class NLUDispatcher extends ANTEventDispatcher {
         return a(nlu.getService()) && !a(mixture);
     }
 
-    private void b(ANTHandlerContext aNTHandlerContext, NLU nlu) {
+    private void checkResultIsTrue(ANTHandlerContext aNTHandlerContext, NLU nlu) {
         LogMgr.d("NLUDispatcher", "preHandleNetNlu nlu :" + nlu);
         if (TextUtils.isEmpty(nlu.getText())) {
             c(aNTHandlerContext, c("-63551"));
@@ -138,25 +136,30 @@ public final class NLUDispatcher extends ANTEventDispatcher {
         }
     }
 
-    private boolean b(float f2) {
+    private boolean checkResultIsTrue(float f2) {
         return f2 > ANTConfigPreference.effectWakeupBenchmark;
     }
 
-    private boolean b(Context context, String str) {
+    private boolean checkResultIsTrue(Context context, String str) {
         return !UserPerferenceUtil.getMainWakeupWord(context).contains(str);
     }
 
-    private boolean b(ANTHandlerContext aNTHandlerContext) {
+    private boolean checkResultIsTrue(ANTHandlerContext aNTHandlerContext) {
         return ((Integer) aNTHandlerContext.engine().unsafe().getOption(1001)).intValue() == 2;
     }
 
-    private boolean b(String str) {
+    private boolean checkResultIsTrue(String str) {
         return a(str);
     }
 
-    private boolean b(Mixture<Intent, Result> mixture) {
+    /**
+     * 解析转换结果
+     * @param mixture
+     * @return
+     */
+    private boolean checkResultIsTrue(Mixture<Intent, Result> mixture) {
         List<NLU<Intent, Result>> nluList = mixture.getNluList();
-        return (nluList == null || nluList.size() == 0) ? false : true;
+        return nluList != null && nluList.size() != 0;
     }
 
     /* access modifiers changed from: private */
@@ -177,7 +180,7 @@ public final class NLUDispatcher extends ANTEventDispatcher {
         aNTHandlerContext.cancelEngine();
         aNTHandlerContext.fireUserEventTriggered(nlu);
         this.b = false;
-        this.f423a = false;
+        this.isHandled = false;
     }
 
     private boolean c(Context context, String str) {
@@ -214,11 +217,11 @@ public final class NLUDispatcher extends ANTEventDispatcher {
         JSONObject parseToJSONObject = JsonTool.parseToJSONObject(error);
         String jsonValue = JsonTool.getJsonValue(parseToJSONObject, "errorCode");
         String jsonValue2 = JsonTool.getJsonValue(parseToJSONObject, "errorMsg");
-        if (b(jsonValue)) {
+        if (checkResultIsTrue(jsonValue)) {
             this.b = true;
             return false;
         }
-        this.f423a = true;
+        this.isHandled = true;
         NLU c2 = c(jsonValue);
         c2.setText(jsonValue2);
         c(ctx, c2);
@@ -245,7 +248,7 @@ public final class NLUDispatcher extends ANTEventDispatcher {
     @Override // com.unisound.vui.handler.ANTEventDispatcher
     public boolean onASRResultLocal(ANTHandlerContext ctx, String result) {
         LogMgr.d("NLUDispatcher", "onASRResultLocal:" + result);
-        if (this.f423a) {
+        if (this.isHandled) {
             LogMgr.e("NLUDispatcher", "result has handled, local nlu handle return");
             return true;
         }
@@ -266,7 +269,7 @@ public final class NLUDispatcher extends ANTEventDispatcher {
     public boolean onASRResultNet(ANTHandlerContext ctx, String result) {
         String str;
         LogMgr.d("NLUDispatcher", "onASRResultNet:" + result);
-        if (this.f423a) {
+        if (this.isHandled) {
             LogMgr.e("NLUDispatcher", "result has handled, net nlu handle return");
             return true;
         }
@@ -280,12 +283,12 @@ public final class NLUDispatcher extends ANTEventDispatcher {
                 str = result;
             }
             LogMgr.w("NLUDispatcher", "unsupported domain " + result);
-            this.f423a = true;
+            this.isHandled = true;
             NLU c2 = c("unsupportedDomain");
             c2.setText(str);
-            b(ctx, c2);
+            checkResultIsTrue(ctx, c2);
             return true;
-        } else if (b(from)) {
+        } else if (checkResultIsTrue(from)) {
             return a(ctx, result, from);
         } else {
             // hook
@@ -338,10 +341,10 @@ public final class NLUDispatcher extends ANTEventDispatcher {
         if (a(ctx.androidContext(), trim)) {
             LogMgr.d("NLUDispatcher", trim + " is CompetitionWord, return");
             return true;
-        } else if (b(ctx.androidContext(), trim) && a(localASR.getScore())) {
+        } else if (checkResultIsTrue(ctx.androidContext(), trim) && a(localASR.getScore())) {
             LogMgr.d("NLUDispatcher", "isFunctionWakeupWord : wakeupResult:" + trim + ";success core:" + localASR.getScore());
             return a(ctx, localASR);
-        } else if (!c(ctx.androidContext(), trim) || !b(localASR.getScore())) {
+        } else if (!c(ctx.androidContext(), trim) || !checkResultIsTrue(localASR.getScore())) {
             return true;
         } else {
             LogMgr.d("NLUDispatcher", "isMainWakeupWord : wakeupResult:" + trim + ";success core:" + localASR.getScore());

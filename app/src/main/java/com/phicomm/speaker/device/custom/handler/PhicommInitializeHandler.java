@@ -175,6 +175,9 @@ public class PhicommInitializeHandler extends ANTEventDispatcher implements Phic
         this.matchProcessor.register();
     }
 
+    /**
+     * 初始化按键处理器
+     */
     private void initKeyEventProcess() {
         this.mKeyEventProcessor = new PhicommKeyEventProcessor(new PhicommKeyEventController(this.mANTEngine, this.mContext), this.mContext);
         this.mKeyEventProcessor.register();

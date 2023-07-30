@@ -8,13 +8,13 @@ import java.util.regex.Pattern;
 public interface a {
 
     /* renamed from: com.unisound.vui.transport.a$a  reason: collision with other inner class name */
-    public static final class C0007a implements a {
+    public static final class ImplA implements a {
 
         /* renamed from: a  reason: collision with root package name */
         static final Pattern f306a = Pattern.compile("\\W\"type\"\\s*:\\s*(-?\\d+)", 2);
         final c b;
 
-        public C0007a(c cVar) {
+        public ImplA(c cVar) {
             if (cVar != null) {
                 this.b = cVar;
                 return;

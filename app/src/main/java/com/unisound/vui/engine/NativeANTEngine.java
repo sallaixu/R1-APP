@@ -5,6 +5,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.unisound.client.IAudioSource;
 import com.unisound.client.SpeechConstants;
@@ -27,6 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 识别结果第一入口
+ */
 public class NativeANTEngine extends AbstractANTEngine {
 
     /* renamed from: a  reason: collision with root package name */
@@ -43,6 +48,10 @@ public class NativeANTEngine extends AbstractANTEngine {
     private Handler handler = new Handler(Looper.getMainLooper()) {
         /* class com.unisound.vui.engine.NativeANTEngine.AnonymousClass1 */
 
+        /**
+         * 唤醒词相关处理事件
+         * @param message
+         */
         public void handleMessage(Message message) {
             switch (message.what) {
                 case 1001:
@@ -55,6 +64,7 @@ public class NativeANTEngine extends AbstractANTEngine {
                 case 1002:
                     pipeline().fireUserEventTriggered(Integer.valueOf((int) EventType.WAKEUP_EVENT_UPDATEWAKEUPWORD_FAIL));
                     return;
+                //设置唤醒词
                 case 1003:
                     setWakeupWord0(d, false);
                     return;
@@ -154,7 +164,9 @@ public class NativeANTEngine extends AbstractANTEngine {
         }
     }
 
-    /* access modifiers changed from: package-private */
+    /**
+     * 语义识别结果监听
+     */
     public final class NativeSpeechUnderstanderListener implements com.unisound.vui.b {
         private final ANTPipeline aNTPipeline;
 
@@ -172,6 +184,7 @@ public class NativeANTEngine extends AbstractANTEngine {
 
         @Override // com.unisound.client.SpeechUnderstanderListener, com.unisound.vui.b
         public void onEvent(int i, int i2) {
+            Log.i(TAG, "onEvent: key {}"+i);
             if (i == 1129) {
                 LogMgr.d("NativeANTEngine", "--->>engine init done vesion " + j.c());
                 j.a(5001, Float.valueOf(5000000.0f));
@@ -248,6 +261,7 @@ public class NativeANTEngine extends AbstractANTEngine {
         @Override // com.unisound.client.SpeechUnderstanderListener, com.unisound.vui.b
         public void onResult(int i, String str) {
             LogMgr.d("NativeANTEngine", "type:" + i + ";onResult:" + str);
+
             if (!ANTConfigPreference.isAsrRecognitionTest) {
                 this.aNTPipeline.fireASRResult(i, str);
             } else if (i == 3201) {
@@ -288,6 +302,11 @@ public class NativeANTEngine extends AbstractANTEngine {
         }
     }
 
+    /**
+     * 构造初始化
+     * @param aVar
+     * @param audioSource
+     */
     public NativeANTEngine(com.unisound.vui.engine.a.AbstractC0007a aVar, IAudioSource audioSource) {
         LogMgr.d("NativeANTEngine", "NativeANTEngine");
         a();
@@ -588,12 +607,15 @@ public class NativeANTEngine extends AbstractANTEngine {
         c();
     }
 
-    /* access modifiers changed from: protected */
+
+    /**
+     *  初始化
+     */
     @Override // com.unisound.vui.engine.AbstractANTEngine
     public void doInitializeMode() {
         ANTEngineConfig config;
         ANTEngineOption<String> aNTEngineOption;
-        String tTSBackendSweetPath;
+        String tTSBackendPath;
         DefaultLocalConfigurationProvider defaultLocalConfigurationProvider = new DefaultLocalConfigurationProvider(this.context);
         config().setOption(ANTEngineOption.TTS_KEY_FRONTEND_MODEL_PATH, defaultLocalConfigurationProvider.getTTSFrontendPath());
         String userTTSModelType = UserPerferenceUtil.getUserTTSModelType(this.context);
@@ -601,22 +623,26 @@ public class NativeANTEngine extends AbstractANTEngine {
         if ("FEMALE".equals(userTTSModelType)) {
             config = config();
             aNTEngineOption = ANTEngineOption.TTS_KEY_BACKEND_MODEL_PATH;
-            tTSBackendSweetPath = defaultLocalConfigurationProvider.getTTSBackendStandarPath();
+            tTSBackendPath = defaultLocalConfigurationProvider.getTTSBackendStandarPath();
         } else if ("MALE".equals(userTTSModelType)) {
             config = config();
             aNTEngineOption = ANTEngineOption.TTS_KEY_BACKEND_MODEL_PATH;
-            tTSBackendSweetPath = defaultLocalConfigurationProvider.getTTSBackendMalePath();
+            tTSBackendPath = defaultLocalConfigurationProvider.getTTSBackendMalePath();
         } else if ("CHILDREN".equals(userTTSModelType)) {
             config = config();
             aNTEngineOption = ANTEngineOption.TTS_KEY_BACKEND_MODEL_PATH;
-            tTSBackendSweetPath = defaultLocalConfigurationProvider.getTTSBackendChildPath();
+            tTSBackendPath = defaultLocalConfigurationProvider.getTTSBackendChildPath();
+        } else if ("LZL".equals(userTTSModelType)) {
+            config = config();
+            aNTEngineOption = ANTEngineOption.TTS_KEY_BACKEND_MODEL_PATH;
+            tTSBackendPath = defaultLocalConfigurationProvider.getTTSBackendLZLPath();
         } else {
             "SWEET".equals(userTTSModelType);
             config = config();
             aNTEngineOption = ANTEngineOption.TTS_KEY_BACKEND_MODEL_PATH;
-            tTSBackendSweetPath = defaultLocalConfigurationProvider.getTTSBackendSweetPath();
+            tTSBackendPath = defaultLocalConfigurationProvider.getTTSBackendSweetPath();
         }
-        config.setOption(aNTEngineOption, tTSBackendSweetPath);
+        config.setOption(aNTEngineOption, tTSBackendPath);
         e();
     }
 

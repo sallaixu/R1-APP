@@ -81,6 +81,10 @@ public class PhicommDeviceStatusProcessor implements IpcReceiver, SceneStateMach
         }
     }
 
+    /**
+     * 获取设备状态
+     * @return 返回设备状态码 int
+     */
     public int getDeviceStatus() {
         if (this.mDeviceStatus == null) {
             this.mDeviceStatus = Integer.valueOf(SharedPreferencesHelper.getInstance(sContext).getIntValue(SP_DEVICE_STATUS, 0));
