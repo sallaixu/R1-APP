@@ -1,14 +1,22 @@
 package com.phicomm.speaker.device.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
 import android.os.Bundle;
 import butterknife.ButterKnife;
+import xyz.sallai.r1.service.and.AndService;
+
 import com.baidu.mobstat.StatService;
+import com.google.gson.internal.$Gson$Preconditions;
 import com.phicomm.speaker.device.R;
 import com.unisound.vui.util.LogMgr;
 
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
+    @SuppressLint("StaticFieldLeak")
+    public static Context context;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,10 +33,11 @@ public class MainActivity extends Activity {
         StatService.enableDeviceMac(this, true);
         StatService.setForTv(this, true) ;
         StatService.autoTrace(this, true, false);
-
-        
-        
-        
+        //上下文
+        context = getApplication();
+        //and web service
+        AndService serverManager = new AndService(getApplicationContext());
+        serverManager.startServer();
     }
 
     public void onResume() {

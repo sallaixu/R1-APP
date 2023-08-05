@@ -1,14 +1,20 @@
 package xyz.sallai.r1.bean;
 
 
+import com.alibaba.fastjson.JSON;
 
 public class MusicBean {
-    static final String start = "{\"semantic\":{\"intent\":{\"artist\":\"sallai\",\"keyword\":\"sallai\"}},\"code\":\"SEARCH_ARTIST\",\"originIntent\":{\"nluSlotInfos\":[]},";
-    static final String end = "\"history\":\"cn.yunzhisheng.music\",\"source\":\"nlu\",\"uniCarRet\":{\"result\":{},\"returnCode\":609,\"message\":\"aios-home.hivoice.cn\"},\"asr_recongize\":\"为你播放歌曲。\",\"rc\":0,\"returnCode\":0,\"audioUrl\":\"http://192.168.199.124:3333/trafficRouter/r/UFD4wK\",\"retTag\":\"nlu\",\"service\":\"cn.yunzhisheng.music\",\"nluProcessTime\":\"160\",\"taskName\":\"search\",\"text\":\"为您播放歌曲\",\"responseId\":\"e306fceb9aca480ca3b324525fef9230\"}";
+    static final String start = "{\"source\":\"nlu\",\"general\":{\"text\":\"请稍等\",\"type\":\"T\"},\"history\":\"cn.yunzhisheng.music\",\"data\":{\"result\":";
+    static final String end = "},\"originIntent\":{\"nluSlotInfos\":[]},\"service\":\"cn.yunzhisheng.music\",\"taskName\":\"search\",\"code\":\"SEARCH_SONG\",\"text\":\"请稍后\",\"asr_recongize\":\"播放歌曲\",\"semantic\":{\"intent\":{\"song\":\"请稍等\",\"keyword\":\"请稍等\"}}}";
 
-
-    public static String getMusicJson(String musicData){
-        return start+musicData+end;
+    /**
+     * 获取因为完整响应
+     * @param listVo
+     * @return
+     */
+    public static String buildMusicJson(MusicListVo listVo) {
+        String json = JSON.toJSONString(listVo);
+        return start+json+end;
     }
 
 }

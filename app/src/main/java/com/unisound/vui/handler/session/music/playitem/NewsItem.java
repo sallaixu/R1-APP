@@ -26,12 +26,12 @@ public class NewsItem implements PlayItem {
 
     @Override // com.unisound.vui.handler.session.music.playitem.PlayItem
     public String getTitle() {
-        return null;
+        return newsBean.getText();
     }
 
     @Override // com.unisound.vui.handler.session.music.playitem.PlayItem
     public String getArtist() {
-        return null;
+        return "每日新闻";
     }
 
     @Override // com.unisound.vui.handler.session.music.playitem.PlayItem

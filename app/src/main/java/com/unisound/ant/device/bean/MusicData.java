@@ -2,8 +2,16 @@ package com.unisound.ant.device.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.google.gson.annotations.SerializedName;
-import nluparser.scheme.AudioResult;
+import com.unisound.vui.handler.session.music.playitem.PlayItem;
 
+
+import lombok.Data;
+import lombok.ToString;
+import nluparser.scheme.AudioResult;
+import xyz.sallai.r1.bean.MusicInfoBean;
+
+@ToString
+@Data
 public class MusicData extends Parameter {
     public static final String CMD_CANCEL_COLLECT = "cancelCollect";
     public static final String CMD_CHANGE_PLAY_MODE = "changeMode";
@@ -37,6 +45,7 @@ public class MusicData extends Parameter {
     private String playState;
     private String timeAsc;
     private int volume;
+    private PlayItem playItem;
 
     public String getListId() {
         return this.listId;

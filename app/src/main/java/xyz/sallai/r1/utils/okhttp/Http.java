@@ -17,18 +17,21 @@ import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
 
+import static xyz.sallai.r1.utils.okhttp.AppConstant.API_TOEKN;
+
 public class Http {
 
 
     private String TAG = this.getClass().getSimpleName();
 
-    public String sendHttp(String url){
+    public static String sendHttp(String url){
 
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
                 .url(url)
                 .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36")
+                .header("custom",API_TOEKN)
                 .build();
 
         try (Response response= client.newCall(request).execute()) {
@@ -51,6 +54,7 @@ public class Http {
         Request request = new Request.Builder()
                 .url(url)
                 .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36")
+                .header("custom",API_TOEKN)
                 .build();
 
         try (Response response= client.newCall(request).execute()) {
@@ -68,13 +72,14 @@ public class Http {
 
     }
 
-    public String sendPostHttp(String url, String data){
+    public static String sendPostHttp(String url, String data){
         RequestBody body = RequestBody.create(data,MediaType.parse("application/json"));
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
                 .url(url)
                 .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36")
+                .header("custom",API_TOEKN)
                 .post(body)
                 .build();
 
@@ -97,6 +102,7 @@ public class Http {
         System.out.println(httpCookie);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(uri.toString())
+                .header("custom",API_TOEKN)
                 .addHeader("Cookie",httpCookie)
                 .build();
 

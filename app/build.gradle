@@ -59,7 +59,7 @@ android {
         }
     }
 }
-
+apply plugin: 'com.yanzhenjie.andserver'
 dependencies {
     // some dependencies
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -114,8 +114,14 @@ dependencies {
     implementation group: 'com.android.volley', name: 'volley', version: '1.1.1'
     implementation group: 'com.kaolafm.sdk', name: 'opensdk', version: '1.4.1', ext: 'pom'
 
-
     implementation project(path: ':KMusic')
 
-
+    //lombok
+    implementation 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
+    //web注解
+    implementation 'com.yanzhenjie.andserver:api:2.1.12'
+    annotationProcessor 'com.yanzhenjie.andserver:processor:2.1.12'
 }

@@ -354,6 +354,7 @@ public class MusicStateMgr extends MusicListenerWapper implements VolumeListener
             }
             if (musicData != null) {
                 musicData.setItemId(item.getId());
+                musicData.setPlayItem(item);
                 if (itemType == PlayItem.ItemType.TYPE_MUSIC) {
                     String listId = item.getListId();
                     if (listId == null) {

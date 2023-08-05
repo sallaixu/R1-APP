@@ -1,14 +1,22 @@
 package com.phicomm.speaker.device.utils;
 
-import android.nfc.Tag;
 import android.util.Log;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.unisound.vui.util.HttpUtils;
 import com.unisound.vui.util.LogMgr;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import nluparser.scheme.SName;
 import okhttp3.Response;
-import xyz.sallai.r1.BodyParse;
+import xyz.sallai.r1.bean.MusicBean;
+import xyz.sallai.r1.bean.MusicListVo;
+import xyz.sallai.r1.service.BaseMusicInterface;
+import xyz.sallai.r1.service.music.WyyMusic;
 import xyz.yhsj.kmusic.KMusic;
 import xyz.yhsj.kmusic.entity.MusicResp;
 import xyz.yhsj.kmusic.entity.MusicTop;
@@ -16,16 +24,13 @@ import xyz.yhsj.kmusic.entity.Song;
 import xyz.yhsj.kmusic.impl.QQImpl;
 import xyz.yhsj.kmusic.site.MusicSite;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author PH
  */
 public class PhicommUtils {
     private static final String TAG = PhicommUtils.class.getSimpleName();
-    public static BodyParse bodyParse = new BodyParse();
+
+    private static  BaseMusicInterface musicService = new WyyMusic();
 
     public static JSONObject refomatNewApi(String word, String response) {
 
@@ -114,7 +119,9 @@ public class PhicommUtils {
         JSONObject resJson = JSONObject.parseObject(rawAsr);
         String asrWord = resJson.getString("text");
         Log.d("PPP", "asr word: " + asrWord);
-
+//        if(null != asrWord && (asrWord.contains("音乐")||asrWord.contains("播放"))) {
+//
+//        }
         if (asrWord != null) {
             boolean need = true;
             Log.d("PPP",resJson.getString("service"));
@@ -122,10 +129,20 @@ public class PhicommUtils {
                 case SName.NEWS: {
                     break;
                 }
+                case SName.CHAT: {
+                    if(asrWord.contains("暂停")||asrWord.contains("继续")) break;
+                    if( !(asrWord.contains("播放")|| asrWord.contains("歌")||asrWord.contains("音乐"))) {
+                        break;
+                    }
+                }
                 case SName.MUSIC: {
                     need = false;
                     Log.d("PPP", "hookRawAsr: my music parse");
-                    rawAsr = bodyParse.MusicParse(asrWord);
+                    String keyword = asrWord.replaceAll("音乐", "").replaceAll("播放", "")
+                    .replaceAll("的歌", "").replaceAll("歌曲","");
+                    MusicListVo musicListVo = musicService.searchMusic(keyword, 20);
+                    String musicRes = MusicBean.buildMusicJson(musicListVo);
+                    rawAsr = musicRes;
                     break;
                 }
                 case SName.AUDIO: {
@@ -162,9 +179,6 @@ public class PhicommUtils {
                     need = false;
                     break;
                 }
-                case SName.CHAT: {
-                    break;
-                }
             }
             if (need) {
                 JSONObject data = resJson.getJSONObject("data");
@@ -187,7 +201,11 @@ public class PhicommUtils {
     public static String byNewApiRaw(String word) throws IOException {
         JSONObject res = refomatNewApi(word, asrByWord(word)).getJSONArray("net_nlu").getJSONObject(0);
         res.put("asr_recongize", word + "。");
-        return res.toJSONString();
+
+        String json = res.toJSONString();
+        Log.d("ppp", json);
+        Log.d("ppp",json.substring(json.length()-300));
+        return json;
     }
 
 

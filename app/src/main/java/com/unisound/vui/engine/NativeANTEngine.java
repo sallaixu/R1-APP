@@ -184,7 +184,6 @@ public class NativeANTEngine extends AbstractANTEngine {
 
         @Override // com.unisound.client.SpeechUnderstanderListener, com.unisound.vui.b
         public void onEvent(int i, int i2) {
-            Log.i(TAG, "onEvent: key {}"+i);
             if (i == 1129) {
                 LogMgr.d("NativeANTEngine", "--->>engine init done vesion " + j.c());
                 j.a(5001, Float.valueOf(5000000.0f));

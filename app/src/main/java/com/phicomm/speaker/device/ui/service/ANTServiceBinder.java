@@ -90,6 +90,7 @@ public class ANTServiceBinder extends Binder {
 
         @Override // com.unisound.vui.bootstrap.ANTEFactory
         public ANTEngine newANTEngine() {
+            GlobalInstance.nativeANTEngine = this.antEngine;
             return this.antEngine;
         }
     }

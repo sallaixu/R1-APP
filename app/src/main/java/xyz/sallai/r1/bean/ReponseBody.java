@@ -1,6 +1,7 @@
 package xyz.sallai.r1.bean;
 
-
+//旧版云之声的现已废弃
+@Deprecated
 public class ReponseBody {
 
     public final static String CHAT_OPEN = "{\"code\":\"ANSWER\",\"originIntent\":{\"nluSlotInfos\":[]},\"history\":\"cn.yunzhisheng.chat\",\"source\":\"nlu\",\"uniCarRet\":{\"result\":{},\"returnCode\":609,\"message\":\"aios-home.hivoice.cn\"},\"asr_recongize\":\"打开夜灯。\",\"rc\":0,\"general\":{\"style\":\"faq\",\"text\":\"已开启\",\"type\":\"T\"},\"returnCode\":0,\"audioUrl\":\"http://192.168.199.124:3333/trafficRouter/r/GN3WZW\",\"retTag\":\"nlu\",\"service\":\"cn.yunzhisheng.chat\",\"nluProcessTime\":\"121\",\"text\":\"打开夜灯\",\"responseId\":\"d8d34946b4e64c6090df66b4e923e324\"}";

@@ -11,5 +11,4 @@ import com.unisound.vui.engine.NativeANTEngine;
  */
 public class GlobalInstance {
     public static ANTEngine nativeANTEngine;
-
 }

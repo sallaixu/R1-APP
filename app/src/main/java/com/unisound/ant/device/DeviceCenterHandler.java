@@ -59,6 +59,8 @@ import nluparser.scheme.Mixture;
 import nluparser.scheme.MusicResult;
 import nluparser.scheme.NLU;
 import nluparser.scheme.Result;
+import xyz.sallai.r1.utils.okhttp.GlobalInstance;
+
 import org.json.JSONObject;
 
 public class DeviceCenterHandler extends SimpleUserEventInboundHandler implements ChannelListener, SessionUpdateCallBack, NetChangeReceiver.NetStateListener, VoiceConnectStateListener, LocationListener, MusicStatusListener, InstallBroadcastReceiver.InstallStateListener {
@@ -373,10 +375,11 @@ public class DeviceCenterHandler extends SimpleUserEventInboundHandler implement
     @Override // com.unisound.ant.device.sessionlayer.SessionUpdateCallBack
     public void onSessionDataUpdate(String messageType, SessionData sessionData) {
 
-        LogMgr.d(TAG, "取消上报会话信息");
-//        BaseRequest<SessionData> reqContent = ServiceProtocolUtil.getReqContent(messageType, sessionData);
-//        if (isMusicData(sessionData)) {
-//            HttpReportUtils.httpReportMusicInfo(this.mUdid, reqContent);
+        LogMgr.d(TAG, "状态上报");
+        BaseRequest<SessionData> reqContent = ServiceProtocolUtil.getReqContent(messageType, sessionData);
+        if (isMusicData(sessionData)) {
+            HttpReportUtils.httpReportMusicInfo(this.mUdid, reqContent);
+        }
 //        } else if (isASRData(sessionData)) {
 //            HttpReportUtils.httpReportASRLog(this.mUdid, reqContent);
 //        } else {
