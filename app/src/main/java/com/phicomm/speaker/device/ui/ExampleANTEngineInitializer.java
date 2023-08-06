@@ -40,6 +40,7 @@ import com.unisound.vui.handler.session.setting.DefaultSettingHandler;
 import com.unisound.vui.handler.session.stock.DefaultStockHandler;
 import com.unisound.vui.handler.session.weather.DefaultWeatherHandler;
 import nluparser.MixtureProcessor;
+import xyz.sallai.r1.utils.GlobalInstance;
 
 public final class ExampleANTEngineInitializer extends ANTEngineInitializer {
     /* access modifiers changed from: protected */
@@ -80,6 +81,9 @@ public final class ExampleANTEngineInitializer extends ANTEngineInitializer {
         pipeline.addLast(new DefaultUnSupportHandler(context));
         pipeline.addLast(new PhicommInitializeHandler());
         pipeline.addLast(new PhicommStatusHandler());
-        new CustomApiManager(context, engine, phicommPlayer).addListener(0, new CustomRingingProcessor(ringingHandler));
+        CustomApiManager customApiManager = new CustomApiManager(context, engine, phicommPlayer);
+        customApiManager.addListener(0, new CustomRingingProcessor(ringingHandler));
+//        GlobalInstance.customApiManager = customApiManager;
+        GlobalInstance.playerManager = phicommPlayer;
     }
 }

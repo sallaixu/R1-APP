@@ -23,7 +23,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-import xyz.sallai.r1.utils.okhttp.GlobalInstance;
+import xyz.sallai.r1.utils.GlobalInstance;
 
 public class ANTServiceBinder extends Binder {
     private static final String TAG = ANTServiceBinder.class.getSimpleName();

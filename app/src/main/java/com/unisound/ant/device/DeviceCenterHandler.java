@@ -59,7 +59,6 @@ import nluparser.scheme.Mixture;
 import nluparser.scheme.MusicResult;
 import nluparser.scheme.NLU;
 import nluparser.scheme.Result;
-import xyz.sallai.r1.utils.okhttp.GlobalInstance;
 
 import org.json.JSONObject;
 

@@ -2,16 +2,16 @@ package com.phicomm.speaker.device.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
-import butterknife.ButterKnife;
-import xyz.sallai.r1.service.and.AndService;
 
 import com.baidu.mobstat.StatService;
-import com.google.gson.internal.$Gson$Preconditions;
 import com.phicomm.speaker.device.R;
 import com.unisound.vui.util.LogMgr;
+
+import butterknife.ButterKnife;
+import xyz.sallai.r1.service.and.AndService;
+import xyz.sallai.r1.service.time.HiTimeService;
 
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
@@ -38,6 +38,8 @@ public class MainActivity extends Activity {
         //and web service
         AndService serverManager = new AndService(getApplicationContext());
         serverManager.startServer();
+        //启动报时
+        HiTimeService.startHiTime();
     }
 
     public void onResume() {

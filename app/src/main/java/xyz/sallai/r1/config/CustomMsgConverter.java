@@ -30,8 +30,7 @@ public class CustomMsgConverter implements MessageConverter {
     public ResponseBody convert(@Nullable Object output, @Nullable MediaType mediaType) {
         String json = JSON.toJSONString(output);
         Log.d(TAG, "convert: " + json);
-        JsonBody jsonBody = new JsonBody(json);
-        return jsonBody;
+        return new JsonBody(json);
     }
 
     @Nullable

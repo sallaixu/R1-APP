@@ -6,10 +6,12 @@ import com.unisound.vui.handler.session.music.playitem.PlayItem;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import nluparser.scheme.AudioResult;
 import xyz.sallai.r1.bean.MusicInfoBean;
 
+@EqualsAndHashCode(callSuper = true)
 @ToString
 @Data
 public class MusicData extends Parameter {

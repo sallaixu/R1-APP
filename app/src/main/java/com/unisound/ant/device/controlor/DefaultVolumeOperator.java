@@ -7,6 +7,8 @@ import com.unisound.vui.util.LogMgr;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import xyz.sallai.r1.utils.GlobalInstance;
+
 public class DefaultVolumeOperator implements VolumeOperator {
     private static final String TAG = "DefaultVolumeOperator";
     private static final int VOLUME_INTERVAL = 1;

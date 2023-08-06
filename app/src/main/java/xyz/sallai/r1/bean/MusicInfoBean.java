@@ -30,6 +30,6 @@ public class MusicInfoBean {
     @Builder.Default
     private String domainName = "music";
     @Builder.Default
-    private String tags = "怀旧,经典,老歌";
+    private String tags = "流行";
     
 }

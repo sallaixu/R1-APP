@@ -16,7 +16,7 @@ import okhttp3.Response;
 import xyz.sallai.r1.bean.MusicBean;
 import xyz.sallai.r1.bean.MusicListVo;
 import xyz.sallai.r1.service.BaseMusicInterface;
-import xyz.sallai.r1.service.music.WyyMusic;
+import xyz.sallai.r1.service.music.NetEasyMusic;
 import xyz.yhsj.kmusic.KMusic;
 import xyz.yhsj.kmusic.entity.MusicResp;
 import xyz.yhsj.kmusic.entity.MusicTop;
@@ -30,7 +30,7 @@ import xyz.yhsj.kmusic.site.MusicSite;
 public class PhicommUtils {
     private static final String TAG = PhicommUtils.class.getSimpleName();
 
-    private static  BaseMusicInterface musicService = new WyyMusic();
+    private static  BaseMusicInterface musicService = new NetEasyMusic();
 
     public static JSONObject refomatNewApi(String word, String response) {
 

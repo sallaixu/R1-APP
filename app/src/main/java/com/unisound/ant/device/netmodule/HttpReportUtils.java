@@ -2,7 +2,6 @@ package com.unisound.ant.device.netmodule;
 
 import android.util.Log;
 
-import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.unisound.ant.device.bean.MusicData;
@@ -18,8 +17,7 @@ import com.unisound.vui.util.StringUtils;
 import com.unisound.vui.util.ThreadUtils;
 import java.io.IOException;
 import okhttp3.Response;
-import xyz.sallai.r1.bean.MusicInfoBean;
-import xyz.sallai.r1.utils.okhttp.GlobalInstance;
+import xyz.sallai.r1.utils.GlobalInstance;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,10 +82,10 @@ public class HttpReportUtils {
             return;
         }
         MusicData musicData = (MusicData) parameter;
-        String playState = musicData.getPlayState();
+        String playState = musicData.getControlCmd();
         if(null == playState) return;
         Log.d(TAG, "httpReportMusicInfo: " + musicData);
-        if (playState.equals("play")) {
+        if (playState.contains("play")) {
             PlayItem playItem = musicData.getPlayItem();
             String id = playItem.getId();
             if (preMusicId.equals(id)) return;
