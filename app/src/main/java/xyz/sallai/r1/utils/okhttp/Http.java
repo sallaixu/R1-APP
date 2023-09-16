@@ -4,7 +4,13 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -25,8 +31,7 @@ public class Http {
     private String TAG = this.getClass().getSimpleName();
 
     public static String sendHttp(String url){
-
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = getClient();
 
         Request request = new Request.Builder()
                 .url(url)
@@ -49,7 +54,7 @@ public class Http {
 
     public static String getHttpCookie(String url){
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = getClient();
 
         Request request = new Request.Builder()
                 .url(url)
@@ -61,8 +66,7 @@ public class Http {
             Headers  headers=response.headers();
             //获取cookie
             List<String> cookies = headers.values("Set-Cookie");
-            String s = cookies.toString();
-            return s;
+            return cookies.toString();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -74,7 +78,7 @@ public class Http {
 
     public static String sendPostHttp(String url, String data){
         RequestBody body = RequestBody.create(data,MediaType.parse("application/json"));
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = getClient();
 
         Request request = new Request.Builder()
                 .url(url)
@@ -130,5 +134,42 @@ public class Http {
     }
 
 
+    public static OkHttpClient getClient() {
+        TrustManager[] trustAllCerts = new TrustManager[]{
+                new X509TrustManager() {
+                    @Override
+                    public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                    }
+
+                    @Override
+                    public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                    }
+
+                    @Override
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return new java.security.cert.X509Certificate[]{};
+                    }
+                }
+        };
+
+        // 获取默认的 SSLContext 实例
+        SSLContext sslContext = null;
+        try {
+            sslContext = SSLContext.getInstance("SSL");
+            System.setProperty("https.protocols", "TLSv1.2,TLSv1.1,SSLv3");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .retryOnConnectionFailure(true)
+                    .sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0])
+                    .build();
+            return client;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
 
 }

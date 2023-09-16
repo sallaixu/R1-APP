@@ -9,14 +9,18 @@ import com.unisound.vui.util.LogMgr;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import nluparser.scheme.SName;
 import okhttp3.Response;
 import xyz.sallai.r1.bean.MusicBean;
 import xyz.sallai.r1.bean.MusicListVo;
+import xyz.sallai.r1.module.enums.MusicServiceEnum;
 import xyz.sallai.r1.service.BaseMusicInterface;
+import xyz.sallai.r1.service.music.MusicBaby;
 import xyz.sallai.r1.service.music.NetEasyMusic;
+import xyz.sallai.r1.service.music.SliderKzMusic;
 import xyz.yhsj.kmusic.KMusic;
 import xyz.yhsj.kmusic.entity.MusicResp;
 import xyz.yhsj.kmusic.entity.MusicTop;
@@ -24,13 +28,21 @@ import xyz.yhsj.kmusic.entity.Song;
 import xyz.yhsj.kmusic.impl.QQImpl;
 import xyz.yhsj.kmusic.site.MusicSite;
 
+import static xyz.sallai.r1.module.enums.MusicServiceEnum.NET_EASY;
+
 /**
  * @author PH
  */
 public class PhicommUtils {
     private static final String TAG = PhicommUtils.class.getSimpleName();
 
-    private static  BaseMusicInterface musicService = new NetEasyMusic();
+    private static BaseMusicInterface netEasyMusic = new NetEasyMusic();
+
+    private static BaseMusicInterface musicBaby = new MusicBaby();
+
+    private static BaseMusicInterface sliderKzMusic = new SliderKzMusic();
+
+    public static MusicServiceEnum musicServiceEnum = MusicServiceEnum.SLIDER_KZ;
 
     public static JSONObject refomatNewApi(String word, String response) {
 
@@ -119,9 +131,10 @@ public class PhicommUtils {
         JSONObject resJson = JSONObject.parseObject(rawAsr);
         String asrWord = resJson.getString("text");
         Log.d("PPP", "asr word: " + asrWord);
-//        if(null != asrWord && (asrWord.contains("音乐")||asrWord.contains("播放"))) {
-//
-//        }
+        //music 关键词
+        List<String> musicKeyWord = Arrays.asList("歌曲","音乐","的歌");
+
+
         if (asrWord != null) {
             boolean need = true;
             Log.d("PPP",resJson.getString("service"));
@@ -137,15 +150,16 @@ public class PhicommUtils {
                 }
                 case SName.MUSIC: {
                     need = false;
-                    Log.d("PPP", "hookRawAsr: my music parse");
-                    String keyword = asrWord.replaceAll("音乐", "").replaceAll("播放", "")
-                    .replaceAll("的歌", "").replaceAll("歌曲","");
-                    MusicListVo musicListVo = musicService.searchMusic(keyword, 20);
-                    String musicRes = MusicBean.buildMusicJson(musicListVo);
-                    rawAsr = musicRes;
+                    rawAsr = parseMusicKeyWord(asrWord);
                     break;
                 }
                 case SName.AUDIO: {
+                    for (String str : musicKeyWord) {
+                        if(asrWord.contains(str)) {
+                            need = false;
+                            rawAsr = parseMusicKeyWord(asrWord);
+                        }
+                    }
                     break;
                 }
                 case SName.WEATHER: {
@@ -196,6 +210,32 @@ public class PhicommUtils {
             }
         }
         return rawAsr;
+    }
+
+
+    private static String parseMusicKeyWord(String asrWord) {
+        Log.d("PPP", "hookRawAsr: my music parse");
+        String keyword = asrWord.replaceAll("音乐", "").replaceAll("播放", "")
+                .replaceAll("的歌", "").replaceAll("歌曲","").replaceAll("的歌曲","");
+        BaseMusicInterface searchMusic = null;
+        switch (musicServiceEnum) {
+            case NET_EASY:
+                searchMusic = netEasyMusic;
+                Log.i(TAG, "music: " + NET_EASY.getName());
+                break;
+            case BABY_MUSIC:
+                searchMusic = musicBaby;
+                Log.i(TAG, "music: " + NET_EASY.getName());
+                break;
+            case SLIDER_KZ:
+                searchMusic = sliderKzMusic;
+                Log.i(TAG, "music: " + NET_EASY.getName());
+                break;
+            default:
+                Log.i(TAG, "music: empty" );
+        }
+        MusicListVo musicListVo = searchMusic.searchMusic(keyword, 6);
+        return MusicBean.buildMusicJson(musicListVo);
     }
 
     public static String byNewApiRaw(String word) throws IOException {

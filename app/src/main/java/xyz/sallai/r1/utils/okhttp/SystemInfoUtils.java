@@ -8,10 +8,15 @@ import android.util.Log;
 
 import com.phicomm.speaker.device.ui.MainActivity;
 
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.DecimalFormat;
 
 import xyz.sallai.r1.bean.system.DiskVo;
 import xyz.sallai.r1.bean.system.MemeryVo;
+import xyz.sallai.r1.utils.RR;
+import xyz.sallai.r1.utils.system.ShellUtils;
 
 /**
  * 获取系统信息
@@ -46,6 +51,17 @@ public class SystemInfoUtils {
                 .total(unitConvert(totalSize)).build();
         return diskVo;
 
+    }
+
+    /**
+     * 读取系统平均负载
+     * @return
+     */
+    public static String getLoadAvg() {
+        ShellUtils.CommandResult commandResult = ShellUtils.execCommand("cat /proc/loadavg", false, true);
+        //1.08 2.05 2.26 3/753 16688
+        String successMsg = commandResult.successMsg;
+        return successMsg;
     }
 
 

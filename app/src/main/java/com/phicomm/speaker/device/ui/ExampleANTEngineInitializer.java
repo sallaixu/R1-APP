@@ -83,7 +83,7 @@ public final class ExampleANTEngineInitializer extends ANTEngineInitializer {
         pipeline.addLast(new PhicommStatusHandler());
         CustomApiManager customApiManager = new CustomApiManager(context, engine, phicommPlayer);
         customApiManager.addListener(0, new CustomRingingProcessor(ringingHandler));
-//        GlobalInstance.customApiManager = customApiManager;
+        GlobalInstance.customApiManager = customApiManager;
         GlobalInstance.playerManager = phicommPlayer;
     }
 }

@@ -122,13 +122,16 @@ public class NetEasyMusic implements BaseMusicInterface {
             if (null != musicInfoBean) {
                 musicInfoBean.setUrl(obj.getString("url"));
                 musicInfoBean.setDuration(obj.getInteger("time"));
+                if(musicInfoBean.getDuration() < 40 * 1000) {
+                    musicResult.getMusicinfo().remove(musicInfoBean);
+                }
             }
         }
     }
 
     public static void main(String[] args) {
         NetEasyMusic wyyMusic = new NetEasyMusic();
-        MusicListVo vo = wyyMusic.searchMusic("孙露", 20);
+        MusicListVo vo = wyyMusic.searchMusic("蔡琴", 20);
         System.out.println(vo);
     }
 }

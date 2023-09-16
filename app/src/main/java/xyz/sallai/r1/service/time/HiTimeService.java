@@ -2,11 +2,14 @@ package xyz.sallai.r1.service.time;
 
 
 import android.util.Log;
+import android.util.TimeUtils;
 
 import com.phicomm.speaker.device.custom.music.PhicommPlayer;
 import com.unisound.ant.device.controlor.DefaultVolumeOperator;
 
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
+
 import xyz.sallai.r1.utils.GlobalInstance;
 
 public class HiTimeService {
@@ -16,7 +19,8 @@ public class HiTimeService {
     public static  int start = 6;
     public static  int end = 22;
     static Thread thread;
-    private static void hiTime(){
+    private static void hiTime() throws InterruptedException {
+        Thread.sleep(1000 * 6);
         Calendar calendar1 = Calendar.getInstance();
         speakTime(calendar1.get(Calendar.HOUR_OF_DAY));
         while (STATE != 0) {
@@ -78,7 +82,11 @@ public class HiTimeService {
                 thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        hiTime();
+                        try {
+                            hiTime();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 thread.start();
@@ -87,8 +95,16 @@ public class HiTimeService {
     }
 
     private static void speakTime(int hour){
+
         PhicommPlayer playerManager = GlobalInstance.playerManager;
         DefaultVolumeOperator volumeOperator = GlobalInstance.volumeOperator;
+        while (null == playerManager || null == volumeOperator) {
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         String hi = "";
         if(hour>0&&hour<9){
             hi = "早上好鸭~";

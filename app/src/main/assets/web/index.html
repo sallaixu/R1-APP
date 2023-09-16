@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>R1增强</title>
+    <style>
+        body{
+        background-size:100% 100%;
+        }
+    </style>
+</head>
+<body  id="mydiv">
+<!-- 模态框 -->
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">提示</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="关闭">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalText">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+<div class="position-fixed bottom-0 right-0 p-3" style="z-index: 5; right: 0; bottom: 0;">
+    <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+        <div class="toast-header">
+            <strong class="mr-auto">友情提示</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
+            设置成功！
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="alert alert-success" role="alert">
+        R1调音台 作者:sallai    开发不易，转载,发帖请注明作者！！！！。
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col col-lg-2">
+
+        </div>
+        <div class="col-md-12">
+            <form>
+                <div class="form-group">
+                    <label for="formControlRange">低音增强</label><span style="font-weight:bold; color:green" id="value"></span>
+                    <input type="range" min="0" step="100" max="1000" class="form-control-range" id="formControlRange">
+                </div>
+            </form>
+            <button type="button" class="btn btn-outline-primary" id="hiTimeSetting">报时设置</button>
+
+<!--下拉表单-->
+<!--            <p>-->
+<!--                <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">-->
+<!--                    Link with href-->
+<!--                </a>-->
+<!--                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">-->
+<!--                    Button with data-target-->
+<!--                </button>-->
+<!--            </p>-->
+            <div class="collapse" id="collapseExample" >
+                <div class="card" style="width: 100%;margin-top:5px">
+                        <div class="card-header">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" value=1 class="custom-control-input" id="hiTimeState">
+                                <label class="custom-control-label" for="hiTimeState" >总开关</label>
+                            </div>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item" style="padding:5px 0">
+
+                                <div class="input-group mb-3" style="margin-bottom: 0!important">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">起时间</span>
+                                    </div>
+                                    <input type="number" id="hiTimeStartTime" max="12" min="0" class="form-control" placeholder="0-12" aria-label="0-12" aria-describedby="basic-addon1">
+                                </div>
+
+                            </li>
+                            <li class="list-group-item" style="padding:5px 0">
+                                <div class="input-group mb-3" style="margin-bottom: 0!important">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" >止时间</span>
+                                    </div>
+                                    <input type="number" id="hiTimeStopTime" max="24" min="12" class="form-control" placeholder="12-24" aria-label="12-24" aria-describedby="basic-addon1">
+                                </div>
+                            </li>
+                            <li class="list-group-item" style="padding:5px 0">
+                                <div class="input-group mb-3" style="margin-bottom: 0!important">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">报时音量 0-15</span>
+                                    </div>
+                                    <input type="number"  id="hiTimeVal" max="15" min="0" class="form-control" placeholder="0-15" aria-label="0-15" aria-describedby="basic-addon1" value=4>
+                                </div>
+                            </li>
+                            <button type="button" class="btn btn-success" id="saveHiTime">保存</button>
+                        </ul>
+                    </div>
+
+
+                </div>
+
+            <div class="col" style="margin-top:10px">
+             <span style="color:green">上传路径:/sdcard/sallaiFile/</span>
+            <form method="post"  enctype="multipart/form-data" action="/upload/file">
+                <div class="form-group">
+                    <div class="row">
+
+                        <div>
+                            <input type="file" class="form-control-file" id="upFile" name="file">
+                        </div>
+                        <div>
+                            <button type="submit">上传</button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </form>
+            </div>
+
+
+
+        <div style="position:relative;height:max-content" id="screenShot" >
+
+            <img id="screen_img"   style="max-width:100%;max-height: 100%;z-index:80;top:0;left:0" src="/screen" />
+            <div style="width:100%;height:100%;z-index:9999;position: absolute;top:0;left:0">
+            </div>
+
+        </div>
+
+        <div class="row" style="width:100%" align="right">
+
+            <div class="col"><button type="button" id="adb_return" class="btn btn-outline-success">模拟返回</button></div>
+        </div>
+
+        </div>
+<!--       赞赏码 -->
+        <div class="sysInfo">
+            <p id = "diskInfo"></p>
+            <p id = "memeryInfo"></p>
+        </div>
+
+
+        <div class="row" align="center" style="margin-top:20px">
+            <div class="col-md-12 col-lg-6">
+                <img  style="width:40%"  src="/img/pay.png"/>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                接受任意金额打赏，欢迎白嫖😄
+                <br>
+                软件默认自启，不需要额外设置,当内存不足该应用可能被kill掉，请再次手动开启或重启R1
+                <br>
+                设置完毕，请及时关闭本页面，以节约R1资源。
+            </div>
+        </div>
+        <div class="col col-lg-2">
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+		window.onload = function() {
+		    //配置
+		    var config = {
+		        vx: 4,	//小球x轴速度,正为右，负为左
+		        vy: 4,	//小球y轴速度
+		        height: 2,	//小球高宽，其实为正方形，所以不宜太大
+		        width: 2,
+		        count: 200,		//点个数
+		        color: "121, 162, 185", 	//点颜色
+		        stroke: "130,255,255", 		//线条颜色
+		        dist: 6000, 	//点吸附距离
+		        e_dist: 20000, 	//鼠标吸附加速距离
+		        max_conn: 10 	//点到点最大连接数
+		    }
+
+		    //调用
+		    CanvasParticle(config);
+		}
+</script>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
+<script>
+var cmdUrl =0;
+
+$(function(){
+
+//var a = ;
+cmdUrl = window.location.href;
+   var start =   cmdUrl.indexOf("://")+3;
+
+   var end =   cmdUrl.indexOf(":",start);
+
+   cmdUrl = cmdUrl.substr(start,end-start);
+ console.log(cmdUrl);
+})
+
+
+
+  $('#screenShot').click(function(event){
+      var x = 0; var y = 0;
+      y = event.pageY - $("#screenShot").offset().top;
+      x = event.pageX - $("#screenShot").offset().left;
+      console.log("左"+$("#screenShot").offset().left);
+      console.log(event.currentTarget.clientHeight);
+      console.log(event.currentTarget.clientHeight/480);
+      var rate =  event.currentTarget.clientHeight/480;
+      x = Math.round(x/rate);
+      y = Math.round(y/rate);
+      console.log(x,y);
+      var url = "http://"+cmdUrl+":8080/shell?shell=input tap "+x+" "+y;
+      myPost(url,"");
+
+  })
+
+  $('#adb_return').click(function(){
+      var url = "http://"+cmdUrl+":8080/shell?shell=input keyevent 4";
+      myPost(url,"");
+  })
+
+
+
+
+  $.ajax({
+     url:"/app/getconfig",
+     type:"POST",
+     data:"",
+    success:function(result){
+    console.log(result);
+    var obj = JSON.parse(result);
+    $('#formControlRange').val(obj.bass);
+    $('#hiTimeVal').val(obj.hiTime.val);
+    $('#hiTimeStartTime').val(obj.hiTime.start);
+    $('#hiTimeStopTime').val(obj.hiTime.end);
+     $('#hiTimeState').val(obj.hiTime.state);
+     $('#value').text(" "+obj.bass/10+"%")
+     if(obj.hiTime.state==1){
+       $('#hiTimeState').prop("checked",true);
+     }
+     
+    }
+})
+
+
+
+
+  $('#hiTimeSetting').click(function(){
+       $('.collapse').collapse('toggle');
+   })
+
+
+
+    $('#formControlRange').change(function(){
+      var val = $('#formControlRange').val();
+      $('#value').text(" "+val/10+"%");
+      console.log(val);
+
+      myPost("/eq/bass",{'val':val});
+      $('.toast').toast('show');
+    })
+
+
+   function myPost(getUrl,sedData){
+     $.ajax({
+     url:getUrl,
+     dataType:"jsonp",
+     type:"POST",
+     data:sedData,
+     success:function(result){
+     return result;
+    }})};
+
+
+$('#hiTimeState').change(function(){
+     console.log('dfsf')
+     var state = $('#hiTimeState').val();
+     
+     if(parseInt(state)==parseInt(1)) 
+        $('#hiTimeState').val(0);else{
+             $('#hiTimeState').val(1);
+        }
+    
+
+})
+
+   $('#saveHiTime').click(function(){
+    var hiTimeVal =  $('#hiTimeVal').val();
+    var hiTimeStartTime =  $('#hiTimeStartTime').val();
+    var hiTimeStopTime =  $('#hiTimeStopTime').val();
+    var hiTimeState =  $('#hiTimeState').val();
+    console.log(hiTimeState);
+    if(hiTimeVal==""||hiTimeState==""||hiTimeStopTime==""||hiTimeStartTime==""){
+      
+      console.log("aaaa");
+      $('#modalText').text("请检查表单！")
+      $('#myModal').modal('toggle')
+      return;
+    }
+    var jsonstr = JSON.stringify({'val':hiTimeVal,'start':hiTimeStartTime,'end':hiTimeStopTime,'state':hiTimeState} );
+    myPost("/hitime/save",jsonstr);
+     $('#modalText').text("保存成功")
+      $('#myModal').modal('toggle')
+   })
+
+
+ $(function () {
+      var t = timestamp = (new Date()).getTime();
+        $("#screen_img").attr("src","/screen?t="+t);
+        setInterval(function () {  
+           var t = timestamp = (new Date()).getTime();
+           $("#screen_img").attr("src","/screen?t="+t);
+        }, 1200);
+    })
+
+
+var count = 0;
+
+function increment() {
+   var result = myPost("/_api/sys/info","");
+   console.log(result);
+   $('#diskInfo').val(result);
+}
+
+setInterval(increment, 2000);
+
+</script>
+<script type="text/javascript" src="/js/canvas-particle.js"></script>
+</body>
+</html>

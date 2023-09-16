@@ -800,7 +800,6 @@ public class NativeANTEngine extends AbstractANTEngine {
         } else {
             new Thread(new Runnable() {
                 /* class com.unisound.vui.engine.NativeANTEngine.AnonymousClass3 */
-
                 public void run() {
                     j.a(list);
                 }

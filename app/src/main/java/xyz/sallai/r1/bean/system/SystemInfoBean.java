@@ -17,6 +17,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class SystemInfoBean {
-    private MemeryVo memeryInfo;
+    //内存信息
+    private MemeryVo memoryInfo;
+    //磁盘信息
     private DiskVo diskInfo;
+    //平均负载
+    private String loadAvg;
 }

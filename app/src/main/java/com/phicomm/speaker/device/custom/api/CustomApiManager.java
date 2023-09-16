@@ -52,6 +52,14 @@ public class CustomApiManager extends SessionExecuteHandler {
     private PhicommLightController phicommLightController;
     private PhicommXController phicommXController;
 
+    /**
+     * 返回斐讯音乐播放控制
+     * @return
+     */
+    public PhicommPlayer getmPhicommPlayer() {
+        return mPhicommPlayer;
+    }
+
     public CustomApiManager(Context context, ANTEngine engine, PhicommPlayer phicommPlayer) {
         this.mContext = context;
         this.mEngine = engine;
@@ -221,6 +229,142 @@ public class CustomApiManager extends SessionExecuteHandler {
         SessionRegister.getUpDownMessageManager().reponseCloudCommandWithoutAck(command.getOperation(), getActionResponse(0));
     }
 
+    /**
+     * 自定义接口控制
+     * @param selfDefinationRequestInfo
+     */
+    public void handleSelfDefinedCommand(SelfDefinationRequestInfo selfDefinationRequestInfo) {
+        String operationType = selfDefinationRequestInfo.getOperationType();
+        if (TextUtils.isEmpty(operationType)) {
+            LogMgr.w(TAG, "operationType is null, ignore");
+            return;
+        }
+        char c = 65535;
+        switch (operationType.hashCode()) {
+            case -1800049821:
+                if (operationType.equals(SelfDefinationRequestInfo.MODIFY_WAKE_UP_WORD)) {
+                    c = 1;
+                    break;
+                }
+                break;
+            case -1215778683:
+                if (operationType.equals(SelfDefinationRequestInfo.RESET_DEVICE)) {
+                    c = '\n';
+                    break;
+                }
+                break;
+            case -1171359559:
+                if (operationType.equals(SelfDefinationRequestInfo.AUDITION_TTS_SPEAKER)) {
+                    c = '\t';
+                    break;
+                }
+                break;
+            case -1033755431:
+                if (operationType.equals(SelfDefinationRequestInfo.MODIFY_DORMANT_STATUS)) {
+                    c = 4;
+                    break;
+                }
+                break;
+            case -320427075:
+                if (operationType.equals(SelfDefinationRequestInfo.GET_DORMANT_STATUS)) {
+                    c = 5;
+                    break;
+                }
+                break;
+            case -263001055:
+                if (operationType.equals(SelfDefinationRequestInfo.MODIFY_DORMANT_LIGHT_STATUS)) {
+                    c = 3;
+                    break;
+                }
+                break;
+            case -22720282:
+                if (operationType.equals(SelfDefinationRequestInfo.GET_AMBIENT_LIGHT_STATUS)) {
+                    c = 7;
+                    break;
+                }
+                break;
+            case 137701706:
+                if (operationType.equals(SelfDefinationRequestInfo.MODIFY_AMBIENT_LIGHT_STATUS)) {
+                    c = 6;
+                    break;
+                }
+                break;
+            case 976071245:
+                if (operationType.equals(SelfDefinationRequestInfo.AUDITION_RINGING)) {
+                    c = '\b';
+                    break;
+                }
+                break;
+            case 1218847283:
+                if (operationType.equals(SelfDefinationRequestInfo.GET_DEVICE_INFO)) {
+                    c = '\f';
+                    break;
+                }
+                break;
+            case 1493475098:
+                if (operationType.equals(SelfDefinationRequestInfo.MODIFY_TTS_PLAYER)) {
+                    c = 2;
+                    break;
+                }
+                break;
+            case 1879432826:
+                if (operationType.equals(SelfDefinationRequestInfo.CHECK_DEVICE_STATE)) {
+                    c = 0;
+                    break;
+                }
+                break;
+            case 1980659193:
+                if (operationType.equals(SelfDefinationRequestInfo.GET_LIGHTING_STATUS)) {
+                    c = 11;
+                    break;
+                }
+                break;
+        }
+        switch (c) {
+            case 0:
+                handleCheckDeviceState();
+                break;
+            case 1:
+                handleModifyWakeUpWord(selfDefinationRequestInfo.getContent());
+                break;
+            case 2:
+                handleModifyTtsPlayer(selfDefinationRequestInfo.getContent());
+                break;
+            case 3:
+                handleModifyDormantLightStatus(selfDefinationRequestInfo.getContent());
+                break;
+            case 4:
+                handleModifyDormantStatus(selfDefinationRequestInfo.getContent());
+                break;
+            case 5:
+                handleGetDormantStatus();
+                break;
+            case 6:
+                handleModifyAmbientLightStatus(selfDefinationRequestInfo.getContent());
+                break;
+            case 7:
+                handleGetAmbientLightStatus();
+                break;
+            case '\b':
+                handleAuditionRinging(selfDefinationRequestInfo.getContent());
+                break;
+            case '\t':
+                handleAuditionTtsSpeaker(selfDefinationRequestInfo.getContent());
+                break;
+            case '\n':
+                handleResetDevice();
+                break;
+            case 11:
+                handleGetLightingStatus();
+                break;
+            case '\f':
+                handleGetDeviceInfo();
+                break;
+        }
+        //状态上报
+//        SessionRegister.getUpDownMessageManager().reponseCloudCommandWithoutAck(command.getOperation(), getActionResponse(0));
+    }
+
     private void handleResetDevice() {
         LogMgr.d(TAG, "handleResetDevice: ");
         this.phicommXController.resetDevice();
@@ -229,6 +373,16 @@ public class CustomApiManager extends SessionExecuteHandler {
 
     private void handleCheckDeviceState() {
         responseToClient(SelfDefinationRequestInfo.CHECK_DEVICE_STATE, 0, new DevicePlayingType(this.mPhicommPlayer.getDevicePlayingType()));
+    }
+
+    /**
+     * 更改唤醒词
+     * @param wakeUp
+     */
+    public void handleModifyWakeUpWord(String wakeUp) {
+        Map<String, Object> attrMap = new HashMap<>();
+        attrMap.put("wakeUpWord", wakeUp);
+        handleModifyWakeUpWord(attrMap);
     }
 
     private void handleModifyWakeUpWord(Map<String, Object> content) {

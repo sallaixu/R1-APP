@@ -22,6 +22,8 @@ buildscript {
     classpath 'org.greenrobot:greendao-gradle-plugin:3.3.0'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" // add plugin
     classpath 'com.yanzhenjie.andserver:plugin:2.1.11'
+    classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
+//    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
 
 
     // NOTE: Do not place your application dependencies here; they belong
