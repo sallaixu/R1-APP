@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.util.Log;
 
+import com.phicomm.speaker.device.ExampleApp;
 import com.phicomm.speaker.device.ui.MainActivity;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -29,7 +30,7 @@ public class SystemInfoUtils {
      * 获取系统内存信息
      */
     public static MemeryVo getMemeryInfo() {
-        ActivityManager activityManager = (ActivityManager) MainActivity.context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) ExampleApp.context.getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
         activityManager.getMemoryInfo(memoryInfo);
         long availableMemory = memoryInfo.availMem;

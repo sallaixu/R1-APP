@@ -1,3 +1,2 @@
 include ':NewPackage'
-include ':KMusic'
 include ':app', ':'

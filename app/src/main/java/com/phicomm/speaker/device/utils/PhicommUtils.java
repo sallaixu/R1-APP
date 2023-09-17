@@ -21,12 +21,6 @@ import xyz.sallai.r1.service.BaseMusicInterface;
 import xyz.sallai.r1.service.music.MusicBaby;
 import xyz.sallai.r1.service.music.NetEasyMusic;
 import xyz.sallai.r1.service.music.SliderKzMusic;
-import xyz.yhsj.kmusic.KMusic;
-import xyz.yhsj.kmusic.entity.MusicResp;
-import xyz.yhsj.kmusic.entity.MusicTop;
-import xyz.yhsj.kmusic.entity.Song;
-import xyz.yhsj.kmusic.impl.QQImpl;
-import xyz.yhsj.kmusic.site.MusicSite;
 
 import static xyz.sallai.r1.module.enums.MusicServiceEnum.NET_EASY;
 
@@ -241,7 +235,6 @@ public class PhicommUtils {
     public static String byNewApiRaw(String word) throws IOException {
         JSONObject res = refomatNewApi(word, asrByWord(word)).getJSONArray("net_nlu").getJSONObject(0);
         res.put("asr_recongize", word + "。");
-
         String json = res.toJSONString();
         Log.d("ppp", json);
         Log.d("ppp",json.substring(json.length()-300));
@@ -249,99 +242,99 @@ public class PhicommUtils {
     }
 
 
-    public static JSONArray searchSongByKWMusic(String key) {
-        MusicResp<List<Song>> tops = KMusic.search(key, 1, 5, MusicSite.QQ);
-        JSONArray playlist = new JSONArray();
-        if (tops.getData() == null) {
-            return playlist;
-        }
-        for (Song song : tops.getData()) {
-            com.alibaba.fastjson.JSONObject jsonSong = new com.alibaba.fastjson.JSONObject();
-            // 播报 title artlist
-            jsonSong.put("title", song.getTitle());
-            jsonSong.put("artist", song.getAuthor());
-
-            jsonSong.put("audioType", 1);
-            jsonSong.put("domainName", "music");
-            jsonSong.put("resourceType", 2);
-            jsonSong.put("episode", song.getCode());
-            jsonSong.put("play_count", 10000);
-            jsonSong.put("url", song.getUrl());
-            jsonSong.put("tags", "怀旧,经典,老歌");
-//            jsonSong.put("cover", song.getPic());
-            jsonSong.put("duration", 312);
-            jsonSong.put("id", song.getSongid());
-//            jsonSong.put("update_time", "2020-03-13 16:06:06");
-//            jsonSong.put("url_high", song.getUrl());
-//            jsonSong.put("cover_large", song.getPic());
-            playlist.add(jsonSong);
-        }
-        return playlist;
-    }
-
-
-    public static String byKWMusic(String word) {
-        // 播放音乐
-        if (word.contains("播放音乐")) {
-
-            String hook_res = "{'net_nlu':[{'semantic':{'intent':{'language':'zh','tag':'经典','keyword':'华语 经典'}},'code':'SEARCH_CATEGORY','data':{'result':{'total':'1','playlist':[{'url_m4a_high':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/3D/wKgMbl3Tj2nhffgcABuIua2Cpis670.m4a','episode':7,'urlm4a':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/71/wKgMeF3Tj2jzjdjeAAqJXTadZ1U342.m4a','play_count':1286527,'title':'New Boy-朴树 （乐夏掀起的金曲记忆，怀念着我们的青春）','url':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/3D/wKgMbl3Tj2iC9TWdAA2ba79Wpww108.mp3','tags':'怀旧,经典,老歌','cover':'http://imgopen.xmcdn.com/group49/M09/16/CF/wKgKl1vtNNfCAyFWAAITMtQComg191.jpg!op_type=3&columns=100&rows=100','duration':222,'update_time':'2020-03-13 16:06:06','url_high':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/3D/wKgMbl3Tj2rir4yiABsxVb9Lyos697.mp3','id':229666914,'cover_large':'http://imgopen.xmcdn.com/group49/M09/16/CF/wKgKl1vtNNfCAyFWAAITMtQComg191.jpg!op_type=3&columns=640&rows=640'}],'totalTime':3,'pagesize':'30','errorCode':0,'page':'1','source':1,'dataSourceName':'喜马拉雅'}},'originIntent':{'nluSlotInfos':[]},'history':'cn.yunzhisheng.audio','source':'nlu','uniCarRet':{'result':{},'returnCode':609,'message':'aios-home.hivoice.cn'},'rc':0,'general':{'actionAble':'true','quitDialog':'true','text':'为您播放经典:','type':'T'},'returnCode':0,'audioUrl':'http://asrv3.hivoice.cn/trafficRouter/r/l9P4z9','service':'cn.yunzhisheng.audio','nluProcessTime':'121','text':'播放华语经典','responseId':'3e0aab8a02924756b1430c2db0171963'}]}";
-
-            JSONObject tempJsonObject = JSONObject.parseObject(hook_res);
-
-            List<Song> songs = new ArrayList<>();
-            if (word.startsWith("播放音乐。")) {
-                for (MusicTop musicTop : QQImpl.INSTANCE.getSongTop().getData()) {
-                    MusicResp<List<Song>> musicResp = QQImpl.INSTANCE.getSongTopDetail(musicTop.getTopId(), musicTop.getTopType(), musicTop.getTopKey(), 1, 100);
-                    if (musicResp.getData().size() > 0) {
-                        songs = musicResp.getData();
-                        break;
-                    }
-
-                }
-
-            } else {
-                MusicResp<List<Song>> tops = KMusic.search(word.replace("播放音乐", ""), 1, 10, MusicSite.QQ);
-                songs = tops.getData();
-            }
+//    public static JSONArray searchSongByKWMusic(String key) {
+//        MusicResp<List<Song>> tops = KMusic.search(key, 1, 5, MusicSite.QQ);
+//        JSONArray playlist = new JSONArray();
+//        if (tops.getData() == null) {
+//            return playlist;
+//        }
+//        for (Song song : tops.getData()) {
+//            com.alibaba.fastjson.JSONObject jsonSong = new com.alibaba.fastjson.JSONObject();
+//            // 播报 title artlist
+//            jsonSong.put("title", song.getTitle());
+//            jsonSong.put("artist", song.getAuthor());
+//
+//            jsonSong.put("audioType", 1);
+//            jsonSong.put("domainName", "music");
+//            jsonSong.put("resourceType", 2);
+//            jsonSong.put("episode", song.getCode());
+//            jsonSong.put("play_count", 10000);
+//            jsonSong.put("url", song.getUrl());
+//            jsonSong.put("tags", "怀旧,经典,老歌");
+////            jsonSong.put("cover", song.getPic());
+//            jsonSong.put("duration", 312);
+//            jsonSong.put("id", song.getSongid());
+////            jsonSong.put("update_time", "2020-03-13 16:06:06");
+////            jsonSong.put("url_high", song.getUrl());
+////            jsonSong.put("cover_large", song.getPic());
+//            playlist.add(jsonSong);
+//        }
+//        return playlist;
+//    }
 
 
-            JSONArray playlist = new JSONArray();
-            for (Song song : songs) {
-                com.alibaba.fastjson.JSONObject jsonSong = new com.alibaba.fastjson.JSONObject();
-                jsonSong.put("url_m4a_high", song.getUrl());
-                jsonSong.put("episode", song.getCode());
-                jsonSong.put("urlm4a", song.getUrl());
-                jsonSong.put("play_count", 10000);
-                jsonSong.put("title", song.getTitle());
-                jsonSong.put("url", song.getUrl());
-                jsonSong.put("tags", "怀旧,经典,老歌");
-                jsonSong.put("cover", song.getPic());
-                jsonSong.put("duration", 312);
-                jsonSong.put("id", song.getSongid());
-                jsonSong.put("update_time", "2020-03-13 16:06:06");
-                jsonSong.put("url_high", song.getUrl());
-                jsonSong.put("cover_large", song.getPic());
-                playlist.add(jsonSong);
-            }
-            if (playlist.size() > 0) {
-                com.alibaba.fastjson.JSONObject jsonResult = new com.alibaba.fastjson.JSONObject();
-                jsonResult.put("total", playlist.size());
-                jsonResult.put("totalTime", 3);
-                jsonResult.put("pagesize", 10);
-                jsonResult.put("errorCode", 0);
-                jsonResult.put("page", "1");
-                jsonResult.put("source", 1);
-                jsonResult.put("dataSourceName", "QQ");
-                jsonResult.put("playlist", playlist);
-
-                com.alibaba.fastjson.JSONObject res1 = tempJsonObject.getJSONArray("net_nlu").getJSONObject(0);
-                res1.getJSONObject("data").put("result", jsonResult);
-                res1.getJSONObject("general").put("text", word);
-//                    String hook_res = "{'net_nlu':[{'semantic':{'intent':{'language':'zh','tag':'经典','keyword':'华语 经典'}},'code':'SEARCH_CATEGORY','data':{'result':{'total':'1','playlist':[{'url_m4a_high':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/3D/wKgMbl3Tj2nhffgcABuIua2Cpis670.m4a','episode':7,'urlm4a':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/71/wKgMeF3Tj2jzjdjeAAqJXTadZ1U342.m4a','play_count':1286527,'title':'New Boy-朴树 （乐夏掀起的金曲记忆，怀念着我们的青春）','url':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/3D/wKgMbl3Tj2iC9TWdAA2ba79Wpww108.mp3','tags':'怀旧,经典,老歌','cover':'http://imgopen.xmcdn.com/group49/M09/16/CF/wKgKl1vtNNfCAyFWAAITMtQComg191.jpg!op_type=3&columns=100&rows=100','duration':222,'update_time':'2020-03-13 16:06:06','url_high':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/3D/wKgMbl3Tj2rir4yiABsxVb9Lyos697.mp3','id':229666914,'cover_large':'http://imgopen.xmcdn.com/group49/M09/16/CF/wKgKl1vtNNfCAyFWAAITMtQComg191.jpg!op_type=3&columns=640&rows=640'}],'totalTime':3,'pagesize':'30','errorCode':0,'page':'1','source':1,'dataSourceName':'喜马拉雅'}},'originIntent':{'nluSlotInfos':[]},'history':'cn.yunzhisheng.audio','source':'nlu','uniCarRet':{'result':{},'returnCode':609,'message':'aios-home.hivoice.cn'},'rc':0,'general':{'actionAble':'true','quitDialog':'true','text':'为您播放经典:','type':'T'},'returnCode':0,'audioUrl':'http://asrv3.hivoice.cn/trafficRouter/r/l9P4z9','service':'cn.yunzhisheng.audio','nluProcessTime':'121','text':'播放华语经典','responseId':'3e0aab8a02924756b1430c2db0171963'}]}";
-//                    hook_res = hook_res.replace('\'','"');
-                return tempJsonObject.toJSONString();
-            }
-        }
-        return null;
-    }
+//    public static String byKWMusic(String word) {
+//        // 播放音乐
+//        if (word.contains("播放音乐")) {
+//
+//            String hook_res = "{'net_nlu':[{'semantic':{'intent':{'language':'zh','tag':'经典','keyword':'华语 经典'}},'code':'SEARCH_CATEGORY','data':{'result':{'total':'1','playlist':[{'url_m4a_high':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/3D/wKgMbl3Tj2nhffgcABuIua2Cpis670.m4a','episode':7,'urlm4a':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/71/wKgMeF3Tj2jzjdjeAAqJXTadZ1U342.m4a','play_count':1286527,'title':'New Boy-朴树 （乐夏掀起的金曲记忆，怀念着我们的青春）','url':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/3D/wKgMbl3Tj2iC9TWdAA2ba79Wpww108.mp3','tags':'怀旧,经典,老歌','cover':'http://imgopen.xmcdn.com/group49/M09/16/CF/wKgKl1vtNNfCAyFWAAITMtQComg191.jpg!op_type=3&columns=100&rows=100','duration':222,'update_time':'2020-03-13 16:06:06','url_high':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/3D/wKgMbl3Tj2rir4yiABsxVb9Lyos697.mp3','id':229666914,'cover_large':'http://imgopen.xmcdn.com/group49/M09/16/CF/wKgKl1vtNNfCAyFWAAITMtQComg191.jpg!op_type=3&columns=640&rows=640'}],'totalTime':3,'pagesize':'30','errorCode':0,'page':'1','source':1,'dataSourceName':'喜马拉雅'}},'originIntent':{'nluSlotInfos':[]},'history':'cn.yunzhisheng.audio','source':'nlu','uniCarRet':{'result':{},'returnCode':609,'message':'aios-home.hivoice.cn'},'rc':0,'general':{'actionAble':'true','quitDialog':'true','text':'为您播放经典:','type':'T'},'returnCode':0,'audioUrl':'http://asrv3.hivoice.cn/trafficRouter/r/l9P4z9','service':'cn.yunzhisheng.audio','nluProcessTime':'121','text':'播放华语经典','responseId':'3e0aab8a02924756b1430c2db0171963'}]}";
+//
+//            JSONObject tempJsonObject = JSONObject.parseObject(hook_res);
+//
+//            List<Song> songs = new ArrayList<>();
+//            if (word.startsWith("播放音乐。")) {
+//                for (MusicTop musicTop : QQImpl.INSTANCE.getSongTop().getData()) {
+//                    MusicResp<List<Song>> musicResp = QQImpl.INSTANCE.getSongTopDetail(musicTop.getTopId(), musicTop.getTopType(), musicTop.getTopKey(), 1, 100);
+//                    if (musicResp.getData().size() > 0) {
+//                        songs = musicResp.getData();
+//                        break;
+//                    }
+//
+//                }
+//
+//            } else {
+//                MusicResp<List<Song>> tops = KMusic.search(word.replace("播放音乐", ""), 1, 10, MusicSite.QQ);
+//                songs = tops.getData();
+//            }
+//
+//
+//            JSONArray playlist = new JSONArray();
+//            for (Song song : songs) {
+//                com.alibaba.fastjson.JSONObject jsonSong = new com.alibaba.fastjson.JSONObject();
+//                jsonSong.put("url_m4a_high", song.getUrl());
+//                jsonSong.put("episode", song.getCode());
+//                jsonSong.put("urlm4a", song.getUrl());
+//                jsonSong.put("play_count", 10000);
+//                jsonSong.put("title", song.getTitle());
+//                jsonSong.put("url", song.getUrl());
+//                jsonSong.put("tags", "怀旧,经典,老歌");
+//                jsonSong.put("cover", song.getPic());
+//                jsonSong.put("duration", 312);
+//                jsonSong.put("id", song.getSongid());
+//                jsonSong.put("update_time", "2020-03-13 16:06:06");
+//                jsonSong.put("url_high", song.getUrl());
+//                jsonSong.put("cover_large", song.getPic());
+//                playlist.add(jsonSong);
+//            }
+//            if (playlist.size() > 0) {
+//                com.alibaba.fastjson.JSONObject jsonResult = new com.alibaba.fastjson.JSONObject();
+//                jsonResult.put("total", playlist.size());
+//                jsonResult.put("totalTime", 3);
+//                jsonResult.put("pagesize", 10);
+//                jsonResult.put("errorCode", 0);
+//                jsonResult.put("page", "1");
+//                jsonResult.put("source", 1);
+//                jsonResult.put("dataSourceName", "QQ");
+//                jsonResult.put("playlist", playlist);
+//
+//                com.alibaba.fastjson.JSONObject res1 = tempJsonObject.getJSONArray("net_nlu").getJSONObject(0);
+//                res1.getJSONObject("data").put("result", jsonResult);
+//                res1.getJSONObject("general").put("text", word);
+////                    String hook_res = "{'net_nlu':[{'semantic':{'intent':{'language':'zh','tag':'经典','keyword':'华语 经典'}},'code':'SEARCH_CATEGORY','data':{'result':{'total':'1','playlist':[{'url_m4a_high':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/3D/wKgMbl3Tj2nhffgcABuIua2Cpis670.m4a','episode':7,'urlm4a':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/71/wKgMeF3Tj2jzjdjeAAqJXTadZ1U342.m4a','play_count':1286527,'title':'New Boy-朴树 （乐夏掀起的金曲记忆，怀念着我们的青春）','url':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/3D/wKgMbl3Tj2iC9TWdAA2ba79Wpww108.mp3','tags':'怀旧,经典,老歌','cover':'http://imgopen.xmcdn.com/group49/M09/16/CF/wKgKl1vtNNfCAyFWAAITMtQComg191.jpg!op_type=3&columns=100&rows=100','duration':222,'update_time':'2020-03-13 16:06:06','url_high':'http://aod.cos.tx.xmcdn.com/group68/M04/D0/3D/wKgMbl3Tj2rir4yiABsxVb9Lyos697.mp3','id':229666914,'cover_large':'http://imgopen.xmcdn.com/group49/M09/16/CF/wKgKl1vtNNfCAyFWAAITMtQComg191.jpg!op_type=3&columns=640&rows=640'}],'totalTime':3,'pagesize':'30','errorCode':0,'page':'1','source':1,'dataSourceName':'喜马拉雅'}},'originIntent':{'nluSlotInfos':[]},'history':'cn.yunzhisheng.audio','source':'nlu','uniCarRet':{'result':{},'returnCode':609,'message':'aios-home.hivoice.cn'},'rc':0,'general':{'actionAble':'true','quitDialog':'true','text':'为您播放经典:','type':'T'},'returnCode':0,'audioUrl':'http://asrv3.hivoice.cn/trafficRouter/r/l9P4z9','service':'cn.yunzhisheng.audio','nluProcessTime':'121','text':'播放华语经典','responseId':'3e0aab8a02924756b1430c2db0171963'}]}";
+////                    hook_res = hook_res.replace('\'','"');
+//                return tempJsonObject.toJSONString();
+//            }
+//        }
+//        return null;
+//    }
 }

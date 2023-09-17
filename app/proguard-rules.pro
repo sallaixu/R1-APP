@@ -193,3 +193,6 @@
 -keep class vi.com.** {*;}
 -keep class com.baidu.vi.** {*;}
 -dontwarn com.baidu.**
+#bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}

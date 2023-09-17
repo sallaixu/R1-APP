@@ -2,6 +2,7 @@ package xyz.sallai.r1.controller;
 
 import android.util.Log;
 
+import com.phicomm.speaker.device.ExampleApp;
 import com.phicomm.speaker.device.custom.api.CustomApiManager;
 import com.phicomm.speaker.device.ui.MainActivity;
 import com.phicomm.speaker.device.utils.PhicommUtils;
@@ -63,7 +64,7 @@ public class PhicommController {
 //        String join = StringUtils.join(typeList, ",");
 //        if(null != ttsUserEnum) return RR.error(201,"发音人不存在！请在以下选择:"+join);
         ANTEngine nativeANTEngine = GlobalInstance.nativeANTEngine;
-        TTSUtils.switchSpeaker(MainActivity.context,nativeANTEngine,ttsUserEnum.ename);
+        TTSUtils.switchSpeaker(ExampleApp.context,nativeANTEngine,ttsUserEnum.ename);
         GlobalInstance.nativeANTEngine.playTTS("嗨哎，我是"+ttsUserEnum.cname +"见到你很高兴");
         return RR.ok();
     }

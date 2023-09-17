@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.phicomm.speaker.device.ui.MainActivity;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.unisound.vui.util.ShellUtils;
 import com.yanzhenjie.andserver.annotation.CrossOrigin;
 import com.yanzhenjie.andserver.annotation.GetMapping;
@@ -86,5 +87,10 @@ public class SystemController {
         Log.i(TAG, "uploadFile: extFile" +extFile.getPath());
         File newFile = new File(path);
         file.transferTo(newFile);
+    }
+
+    @GetMapping("/crash")
+    public void crash() {
+        CrashReport.testJavaCrash();
     }
 }

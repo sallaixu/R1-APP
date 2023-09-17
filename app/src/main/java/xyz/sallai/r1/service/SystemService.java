@@ -3,6 +3,7 @@ package xyz.sallai.r1.service;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.phicomm.speaker.device.ExampleApp;
 import com.phicomm.speaker.device.ui.MainActivity;
 
 import org.java_websocket.WebSocket;
@@ -48,7 +49,7 @@ public class SystemService {
             @Override
             public void run() {
                 scrcpyStatus = true;
-                Bitmap screenshot = ScreenShot.screenshot(MainActivity.context);
+                Bitmap screenshot = ScreenShot.screenshot(ExampleApp.context);
                 if(null != screenshot) {
                     // 假设bitmapData为位图的字节数组
                     byte[] bytes = BitMapUtil.convertBitmapToByteArray(screenshot,quality);

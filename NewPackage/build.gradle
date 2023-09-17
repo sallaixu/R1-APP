@@ -45,6 +45,9 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    packagingOptions {
+        pickFirst 'lib/armeabi-v7a/libBugly.so'
+    }
 
 }
 

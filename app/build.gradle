@@ -41,6 +41,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    packagingOptions {
+        pickFirst 'lib/armeabi-v7a/libBugly.so'
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -120,7 +124,7 @@ dependencies {
     implementation group: 'com.android.volley', name: 'volley', version: '1.1.1'
     implementation group: 'com.kaolafm.sdk', name: 'opensdk', version: '1.4.1', ext: 'pom'
 
-    implementation project(path: ':KMusic')
+//    implementation project(path: ':KMusic')
 
     //lombok
     implementation 'org.projectlombok:lombok:1.18.26'
@@ -138,7 +142,12 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 
+    implementation 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如4.0.3
 
+//     https://mvnrepository.com/artifact/com.tencent.bugly/crashreport
+    implementation group: 'com.tencent.bugly', name: 'crashreport', version: '2.6.6.1'
+//     https://mvnrepository.com/artifact/com.tencent.bugly/nativecrashreport
+    implementation group: 'com.tencent.bugly', name: 'nativecrashreport', version: '3.3.1'
 
 
 

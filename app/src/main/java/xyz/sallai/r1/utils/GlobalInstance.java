@@ -1,5 +1,6 @@
 package xyz.sallai.r1.utils;
 
+import com.phicomm.speaker.device.ExampleApp;
 import com.phicomm.speaker.device.custom.api.CustomApiManager;
 import com.phicomm.speaker.device.custom.music.PhicommMusicController;
 import com.phicomm.speaker.device.custom.music.PhicommPlayer;
@@ -20,5 +21,5 @@ public class GlobalInstance {
     public static ANTEngine nativeANTEngine;  // 本地ant引擎
     public static CustomApiManager customApiManager;
     public static PhicommPlayer playerManager;
-    public static DefaultVolumeOperator volumeOperator = DefaultVolumeOperator.getInstance(MainActivity.context);
+    public static DefaultVolumeOperator volumeOperator = DefaultVolumeOperator.getInstance(ExampleApp.context);
 }
