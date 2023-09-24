@@ -1,38 +1,25 @@
 package xyz.sallai.r1.controller;
 
-import android.graphics.Bitmap;
 import android.os.Environment;
 import android.util.Log;
 
-import com.phicomm.speaker.device.ui.MainActivity;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.unisound.vui.util.ShellUtils;
 import com.yanzhenjie.andserver.annotation.CrossOrigin;
 import com.yanzhenjie.andserver.annotation.GetMapping;
 import com.yanzhenjie.andserver.annotation.PathVariable;
 import com.yanzhenjie.andserver.annotation.PostMapping;
-import com.yanzhenjie.andserver.annotation.QueryParam;
 import com.yanzhenjie.andserver.annotation.RequestMapping;
 import com.yanzhenjie.andserver.annotation.RequestParam;
 import com.yanzhenjie.andserver.annotation.RestController;
-import com.yanzhenjie.andserver.framework.config.Multipart;
 import com.yanzhenjie.andserver.http.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOError;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.Base64;
 
-import xyz.sallai.r1.bean.system.DiskVo;
-import xyz.sallai.r1.bean.system.MemeryVo;
-import xyz.sallai.r1.bean.system.SystemInfoBean;
+import xyz.sallai.r1.module.vo.sys.BaseSysInfoVo;
 import xyz.sallai.r1.service.SystemService;
-import xyz.sallai.r1.service.scrcpy.ScreenShot;
-import xyz.sallai.r1.service.socket.SocketService;
 import xyz.sallai.r1.utils.RR;
-import xyz.sallai.r1.utils.codec.BitMapUtil;
-import xyz.sallai.r1.utils.okhttp.SystemInfoUtils;
 
 /**
  * Description: [对类的简单描述]
@@ -49,12 +36,9 @@ public class SystemController {
 
     @GetMapping("/info")
     public RR getSysInfo() {
-        DiskVo diskInfo = SystemInfoUtils.getDiskInfo();
-        MemeryVo memeryInfo = SystemInfoUtils.getMemeryInfo();
-        String loadAvg = SystemInfoUtils.getLoadAvg();
-        SystemInfoBean systemInfoBean = new SystemInfoBean(memeryInfo, diskInfo,loadAvg);
-        Log.d(TAG, "getSysInfo: " + systemInfoBean);
-        return RR.ok(systemInfoBean);
+        SystemService systemService = new SystemService();
+        BaseSysInfoVo systemBaseInfo = systemService.getSystemBaseInfo();
+        return RR.ok(systemBaseInfo);
     }
     @GetMapping("/screen/{start}")
     public RR changeScrcpy(@PathVariable("start") String start,@RequestParam(value = "freq",required = false) String freq,

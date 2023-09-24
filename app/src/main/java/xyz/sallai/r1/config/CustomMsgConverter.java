@@ -38,4 +38,10 @@ public class CustomMsgConverter implements MessageConverter {
     public <T> T convert(@NonNull InputStream stream, @Nullable MediaType mediaType, Type type) throws IOException {
         return null;
     }
+
+    public static ResponseBody convertBody(@Nullable Object output, @Nullable MediaType mediaType) {
+        String json = JSON.toJSONString(output);
+        Log.d(TAG, "convert: " + json);
+        return new JsonBody(json);
+    }
 }

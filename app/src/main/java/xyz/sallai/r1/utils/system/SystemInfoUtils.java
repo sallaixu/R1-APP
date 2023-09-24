@@ -1,23 +1,17 @@
-package xyz.sallai.r1.utils.okhttp;
+package xyz.sallai.r1.utils.system;
 
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Environment;
 import android.os.StatFs;
-import android.util.Log;
+import android.os.SystemClock;
 
 import com.phicomm.speaker.device.ExampleApp;
-import com.phicomm.speaker.device.ui.MainActivity;
-
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.text.DecimalFormat;
 
 import xyz.sallai.r1.bean.system.DiskVo;
-import xyz.sallai.r1.bean.system.MemeryVo;
-import xyz.sallai.r1.utils.RR;
-import xyz.sallai.r1.utils.system.ShellUtils;
+import xyz.sallai.r1.bean.system.MemoryVo;
 
 /**
  * 获取系统信息
@@ -29,13 +23,13 @@ public class SystemInfoUtils {
     /**
      * 获取系统内存信息
      */
-    public static MemeryVo getMemeryInfo() {
+    public static MemoryVo getMemeryInfo() {
         ActivityManager activityManager = (ActivityManager) ExampleApp.context.getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
         activityManager.getMemoryInfo(memoryInfo);
         long availableMemory = memoryInfo.availMem;
         long totalMemory = memoryInfo.totalMem;
-        MemeryVo memeryVo = MemeryVo.builder().available(unitConvert(availableMemory))
+        MemoryVo memeryVo = MemoryVo.builder().available(unitConvert(availableMemory))
                 .total(unitConvert(totalMemory)).build();
         return memeryVo;
     }
@@ -77,6 +71,30 @@ public class SystemInfoUtils {
             value = df.format(megaBytes) + "M";
         }
         return value;
+    }
+
+    /**
+     * 获取开机时间
+     * @param context
+     * @return
+     */
+    public static String getBootTime(Context context) {
+        // 获取系统启动时间（开机时间）的毫秒数
+        long uptimeMillis = SystemClock.elapsedRealtime();
+
+        // 计算已启动的天数
+        long days = uptimeMillis / (1000 * 60 * 60 * 24);
+
+        // 计算已启动的小时数
+        long hours = (uptimeMillis % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+
+        // 计算已启动的分钟数
+        long minutes = (uptimeMillis % (1000 * 60 * 60)) / (1000 * 60);
+
+        // 构建字符串表示已启动的时间
+        String bootTime = days + "天 " + hours + "小时 " + minutes + "分钟";
+
+        return bootTime;
     }
 
 }

@@ -76,6 +76,14 @@ public class DeviceTool {
         return connectionInfo != null ? connectionInfo.getMacAddress() : INVALID_IMEI;
     }
 
+    /**
+     * 获取wifi连接信息
+     * @return
+     */
+    public static WifiInfo getWifiInfo(Context context) {
+        return ((WifiManager) context.getSystemService("wifi")).getConnectionInfo();
+    }
+
     public static String getMac(Context context) {
         WifiInfo connectionInfo;
         return (context == null || (connectionInfo = ((WifiManager) context.getSystemService("wifi")).getConnectionInfo()) == null) ? INVALID_IMEI : connectionInfo.getMacAddress();

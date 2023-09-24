@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemeryVo {
+public class MemoryVo {
     private String total;
     private String available;
 }

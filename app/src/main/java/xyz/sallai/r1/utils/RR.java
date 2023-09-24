@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import xyz.sallai.r1.module.enums.ErrorEnum;
 
 /**
  * Description: [对类的简单描述]
@@ -70,6 +71,10 @@ public class RR implements Serializable {
 
     public static  RR error(int code, String msg) {
         return new RR(code, msg);
+    }
+
+    public static RR errorEnum(ErrorEnum errorEnum) {
+        return RR.error(errorEnum.getCode(), errorEnum.getMsg());
     }
 
 }

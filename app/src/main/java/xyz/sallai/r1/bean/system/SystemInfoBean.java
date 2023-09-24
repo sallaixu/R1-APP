@@ -1,7 +1,6 @@
 package xyz.sallai.r1.bean.system;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -18,7 +17,7 @@ import lombok.ToString;
 @ToString
 public class SystemInfoBean {
     //内存信息
-    private MemeryVo memoryInfo;
+    private MemoryVo memoryInfo;
     //磁盘信息
     private DiskVo diskInfo;
     //平均负载

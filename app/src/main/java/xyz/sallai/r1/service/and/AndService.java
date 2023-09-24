@@ -15,22 +15,17 @@ import java.util.concurrent.TimeUnit;
 
 public class AndService {
 
-    private Server mServer;
+    private final Server mServer;
 
     /**
      * Create server.
      */
     public AndService(Context context) {
 
-//        mServer = AndServer.proxyServer()
-//                .addProxy("www.aa.com", "http://hangzhou.gov.cn")
-//                .port(9090)
-//                .timeout(10, TimeUnit.SECONDS)
-//                .build();
 
         mServer = AndServer.webServer(context)
                 .port(3333)
-                .timeout(10, TimeUnit.SECONDS)
+                .timeout(3, TimeUnit.SECONDS)
                 .listener(new Server.ServerListener() {
                     @Override
                     public void onStarted() {
@@ -56,7 +51,6 @@ public class AndService {
      * Start server.
      */
     public void startServer() {
-        Log.w("AndServer", "进入方法");
         if (mServer.isRunning()) {
             // TODO The server is already up.
             Log.w("AndServer", "The server is already up.");

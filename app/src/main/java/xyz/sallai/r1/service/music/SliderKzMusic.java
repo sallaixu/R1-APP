@@ -21,7 +21,7 @@ import xyz.sallai.r1.utils.okhttp.Http;
  * Author:
  * Date: 2023/9/6
  */
-public class SliderKzMusic implements BaseMusicInterface {
+public class SliderKzMusic extends AbstractMusic {
     private final String searchUrl = "http://slider.kz/vk_auth.php?q=";
     private final String baseHost = "http://slider.kz/";
 

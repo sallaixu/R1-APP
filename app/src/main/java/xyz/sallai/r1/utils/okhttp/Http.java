@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -23,7 +24,8 @@ import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
 
-import static xyz.sallai.r1.utils.okhttp.AppConstant.API_TOEKN;
+import static xyz.sallai.r1.utils.AppConstant.API_TOEKN;
+
 
 public class Http {
 
@@ -32,7 +34,6 @@ public class Http {
 
     public static String sendHttp(String url){
         OkHttpClient client = getClient();
-
         Request request = new Request.Builder()
                 .url(url)
                 .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36")
@@ -48,7 +49,6 @@ public class Http {
         }
         Log.d("okHttp","okhttp->error");
         return "ERROR";
-
     }
 
 
@@ -158,11 +158,11 @@ public class Http {
             sslContext = SSLContext.getInstance("SSL");
             System.setProperty("https.protocols", "TLSv1.2,TLSv1.1,SSLv3");
             sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-            OkHttpClient client = new OkHttpClient.Builder()
+            return new OkHttpClient.Builder()
                     .retryOnConnectionFailure(true)
+                    .connectTimeout(3, TimeUnit.SECONDS)
                     .sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0])
                     .build();
-            return client;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (KeyManagementException e) {

@@ -1,10 +1,6 @@
 package xyz.sallai.r1.controller;
 
-import android.util.Log;
-
 import com.phicomm.speaker.device.ExampleApp;
-import com.phicomm.speaker.device.custom.api.CustomApiManager;
-import com.phicomm.speaker.device.ui.MainActivity;
 import com.phicomm.speaker.device.utils.PhicommUtils;
 import com.phicomm.speaker.device.utils.TTSUtils;
 import com.unisound.vui.engine.ANTEngine;
@@ -14,21 +10,14 @@ import com.yanzhenjie.andserver.annotation.PathVariable;
 import com.yanzhenjie.andserver.annotation.RequestMapping;
 import com.yanzhenjie.andserver.annotation.RestController;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import xyz.sallai.r1.bean.system.DiskVo;
-import xyz.sallai.r1.bean.system.MemeryVo;
-import xyz.sallai.r1.bean.system.SystemInfoBean;
 import xyz.sallai.r1.module.enums.MusicServiceEnum;
 import xyz.sallai.r1.module.enums.TTSUserEnum;
 import xyz.sallai.r1.utils.GlobalInstance;
 import xyz.sallai.r1.utils.RR;
-import xyz.sallai.r1.utils.okhttp.SystemInfoUtils;
 
 /**
  * Description: [对类的简单描述]

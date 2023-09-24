@@ -1,7 +1,5 @@
 package xyz.sallai.r1.service.music;
 
-import android.util.Log;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -14,17 +12,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import nluparser.scheme.MusicResult;
 import xyz.sallai.r1.bean.MusicInfoBean;
 import xyz.sallai.r1.bean.MusicListVo;
 import xyz.sallai.r1.service.BaseMusicInterface;
-import xyz.sallai.r1.utils.okhttp.AppConstant;
+import xyz.sallai.r1.utils.AppConstant;
 import xyz.sallai.r1.utils.okhttp.Http;
 
 /**
  * author:sallai@aliyun.com
  */
-public class NetEasyMusic implements BaseMusicInterface {
+public class NetEasyMusic extends AbstractMusic {
 
     //http://music.163.com/song/media/outer/url?id=1486631924
     private static final String SEARCH_URL = AppConstant.R1_CUSTOM_DOMAIN + "/cloudsearch?offset=0";

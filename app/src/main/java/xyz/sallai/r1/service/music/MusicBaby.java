@@ -1,9 +1,5 @@
 package xyz.sallai.r1.service.music;
 
-import android.util.Log;
-
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,7 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import xyz.sallai.r1.bean.MusicInfoBean;
 import xyz.sallai.r1.bean.MusicListVo;
@@ -29,7 +24,7 @@ import xyz.sallai.r1.utils.okhttp.Http;
  * Date: 2023/8/23
  * url: https://www.gequbao.com
  */
-public class MusicBaby implements BaseMusicInterface{
+public class MusicBaby extends AbstractMusic{
     public static final String searchUrl = "https://www.gequbao.com/s/";
     public static final String getPlayUrl = "https://www.gequbao.com";
     public static final ExecutorService pool = MyThreadPool.getThreadPool();
@@ -70,18 +65,10 @@ public class MusicBaby implements BaseMusicInterface{
             getPlayUrl(id,musicBeanVo,countDownLatch);
             musicList.add(musicBeanVo);
         }
-        try {
-            countDownLatch.await(10, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        List<MusicInfoBean> removeList = new ArrayList<>();
-        for (MusicInfoBean musicInfoBean : musicList) {
-            if(StringUtils.isEmpty(musicInfoBean.getUrl())) removeList.add(musicInfoBean);
-        }
-        musicList.removeAll(removeList);
+        waitRequestOkForTime(countDownLatch, musicList);
         return musicList;
     }
+
 
     private void getPlayUrl(final String urlPath, final MusicInfoBean musicInfoBean, final CountDownLatch countDownLatch) {
         pool.execute(new Runnable() {
