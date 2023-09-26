@@ -43,7 +43,6 @@ public class MusicBaby extends AbstractMusic{
         CountDownLatch countDownLatch = new CountDownLatch(size);
         Document parse = Jsoup.parse(html);
         Elements elementsByClass = parse.body().getElementsByClass("card mb-1");
-//        Log.i(TAG,elementsByClass.toString());
         Element container = Objects.requireNonNull(elementsByClass.first()).getElementsByClass("card-text").first();
         assert container != null;
         Elements musicElements = container.children();
@@ -90,7 +89,6 @@ public class MusicBaby extends AbstractMusic{
     public static void main(String[] args) {
         MusicBaby musicBaby = new MusicBaby();
         long start = System.currentTimeMillis();
-
         musicBaby.searchMusic("周杰伦",6);
         System.out.println(System.currentTimeMillis() - start + "ms");
     }
