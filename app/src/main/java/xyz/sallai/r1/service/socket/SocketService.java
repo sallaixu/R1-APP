@@ -1,7 +1,7 @@
 package xyz.sallai.r1.service.socket;
 
 /**
- * Description: [对类的简单描述]
+ * Description: socket服务类
  * <p>
  * Author:
  * Date: 2023/8/15
@@ -27,6 +27,9 @@ public class SocketService extends WebSocketServer {
         super(new InetSocketAddress(port));
     }
 
+    /**
+     * 获取socket实例，不存在实例化启动socket
+     */
     public static SocketService getInstance() {
         if(null == serverSocket) {
             synchronized (SocketService.class) {
@@ -42,17 +45,20 @@ public class SocketService extends WebSocketServer {
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
         //开始连接
+        clientSet.add(conn);
         Log.i(TAG, "onOpen: " + conn.getRemoteSocketAddress());
     }
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         //服务器关闭
+        clientSet.remove(conn);
+        Log.i(TAG, "onClose: " + conn.getRemoteSocketAddress() + "reason:" + reason);
     }
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-        //接收消息，做逻辑处理，这里我直接重新返回消息
+        //接收消息
     }
 
     @Override
@@ -64,6 +70,15 @@ public class SocketService extends WebSocketServer {
     @Override
     public void onStart() {
         Log.i(TAG, "onStart: WebSocket server started");
+    }
+
+    // 自定义方法来发送广播消息给所有连接的客户端
+    public void broadcastMessage(String key, Object data) {
+        SocketBean socketBean = SocketBean.builder().key(key).data(data).build();
+        JSON.toJSONString(socketBean);
+        for (WebSocket client : clientSet) {
+            client.send(socketBean);
+        }
     }
 
 }
